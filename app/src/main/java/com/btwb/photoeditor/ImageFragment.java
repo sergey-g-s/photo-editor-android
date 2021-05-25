@@ -32,10 +32,14 @@ public class ImageFragment extends Fragment implements ImageAdapter.OnImageClick
 
         TypedArray images = getResources().obtainTypedArray(R.array.photo_editor_photos);
 
+        ArrayList<String> stickers = new ArrayList<>();
         stickerBitmaps = new ArrayList<>();
         for (int i = 0; i < images.length(); i++) {
+            images.getResourceId(i, -1);
+            System.out.println(photoEditorActivity.getResources().toString());
             stickerBitmaps.add(decodeSampledBitmapFromResource(photoEditorActivity.getResources(), images.getResourceId(i, -1), 120, 120));
         }
+        System.out.println(stickerBitmaps.toString());
     }
 
     @Nullable
