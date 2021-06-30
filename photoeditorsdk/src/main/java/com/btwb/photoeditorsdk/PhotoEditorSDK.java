@@ -2,10 +2,13 @@ package com.btwb.photoeditorsdk;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,6 +88,33 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addedViews.add(addTextRootView);
         if (onPhotoEditorSDKListener != null)
             onPhotoEditorSDKListener.onAddViewListener(ViewType.TEXT, addedViews.size());
+    }
+
+    public void addStickers(String text, Typeface font, Drawable icon, int fontSize, int x, int y, String textColor, String backgroundColor, int width) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
+        TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
+        addTextView.setText(text);
+        addTextView.setTypeface(font);
+        addTextView.setTextSize(fontSize);
+        addTextView.setLeft(x);
+        addTextView.setTop(y);
+        addTextView.setTextColor(Color.parseColor(textColor));
+        addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
+        addTextView.setWidth(width);
+        addTextView.setCompoundDrawablesWithIntrinsicBounds(icon, null , null, null);
+        MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
+                parentView, this.imageView, onPhotoEditorSDKListener);
+        multiTouchListener.setOnMultiTouchListener(this);
+        addTextRootView.setOnTouchListener(multiTouchListener);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        parentView.addView(addTextRootView, params);
+        addedViews.add(addTextRootView);
+        if (onPhotoEditorSDKListener != null)
+            onPhotoEditorSDKListener.onAddViewListener(ViewType.TEXT, addedViews.size());
+
     }
 
     public void addEmoji(String emojiName, Typeface emojiFont) {

@@ -1,16 +1,20 @@
 package com.btwb.photoeditor;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -68,6 +72,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         Typeface newFont = Typeface.createFromAsset(getAssets(), "Eventtus-Icons.ttf");
         emojiFont = Typeface.createFromAsset(getAssets(), "emojione-android.ttf");
+
 
         BrushDrawingView brushDrawingView = (BrushDrawingView) findViewById(R.id.drawing_view);
         drawingViewColorPickerRecyclerView = (RecyclerView) findViewById(R.id.drawing_view_color_picker_recycler_view);
@@ -180,6 +185,13 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             }
 
         }.start();
+
+        Drawable img = ContextCompat.getDrawable(this,R.drawable.r);
+        Bitmap testimg = ((BitmapDrawable) img).getBitmap();
+        Drawable icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(testimg, 50, 100, true));
+
+        photoEditorSDK.addStickers("50-40-30-20-10 reps of:\nDouble Under\nAbMat Sit-up", Typeface.create(Typeface.MONOSPACE, Typeface.BOLD), icon, 14, 0,0, "#000000", "#ffffff", 400);
+
     }
 
     private boolean stringIsNotEmpty(String string) {
@@ -204,7 +216,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void addText(String text, int colorCodeTextView) {
-        photoEditorSDK.addText(text, colorCodeTextView);
+        photoEditorSDK.addText(text, colorCodeTextView, Typeface.create(Typeface.MONOSPACE, Typeface.BOLD));
     }
 
     private void clearAllViews() {
