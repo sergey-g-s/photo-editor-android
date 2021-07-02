@@ -19,12 +19,6 @@
             android:onClick="openUserGallery"
             android:text="@string/choose_from_gallery" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="openUserCamera"
-            android:text="@string/choose_from_camera" />
-
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

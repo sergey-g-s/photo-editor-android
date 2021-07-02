@@ -66,26 +66,29 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             onPhotoEditorSDKListener.onAddViewListener(ViewType.IMAGE, addedViews.size());
     }
 
-    public void addText(String text, int colorCodeTextView, Typeface fontTextView) {
+    public void addText(TextView textView) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
         TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
         addTextView.setGravity(Gravity.CENTER);
-        addTextView.setText(text);
-        if (colorCodeTextView != -1)
-            addTextView.setTextColor(colorCodeTextView);
-        if(fontTextView != null)
-            addTextView.setTypeface(fontTextView);
+//        addTextView.setText(text);
+//        if (colorCodeTextView != -1)
+//            addTextView.setTextColor(colorCodeTextView);
+//        if(fontTextView != null)
+//            addTextView.setTypeface(fontTextView);
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
                 parentView, this.imageView, onPhotoEditorSDKListener);
         multiTouchListener.setOnMultiTouchListener(this);
-        addTextRootView.setOnTouchListener(multiTouchListener);
+        textView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        parentView.addView(addTextRootView, params);
-        addedViews.add(addTextRootView);
+        if(textView.getParent() != null) {
+            ((ViewGroup)textView.getParent()).removeView(textView); // <- fix
+        }
+        parentView.addView(textView, params);
+        addedViews.add(textView);
         if (onPhotoEditorSDKListener != null)
             onPhotoEditorSDKListener.onAddViewListener(ViewType.TEXT, addedViews.size());
     }
@@ -97,21 +100,26 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addTextView.setText(text);
         addTextView.setTypeface(font);
         addTextView.setTextSize(fontSize);
-        addTextView.setLeft(x);
-        addTextView.setTop(y);
+        addTextView.setX(x);
+        addTextView.setShadowLayer(1.5f, -1, 1, Color.LTGRAY);;
+        addTextView.setY(y);
+        addTextView.setPadding(0,0,0,0);
         addTextView.setTextColor(Color.parseColor(textColor));
         addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
-        addTextView.setWidth(width);
+        if (width > 0) {
+            addTextView.setWidth(width);
+        }
+        addTextView.setGravity(Gravity.CENTER_VERTICAL);
         addTextView.setCompoundDrawablesWithIntrinsicBounds(icon, null , null, null);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        parentView.addView(addTextView, params);
+        addedViews.add(addTextView);
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
                 parentView, this.imageView, onPhotoEditorSDKListener);
         multiTouchListener.setOnMultiTouchListener(this);
-        addTextRootView.setOnTouchListener(multiTouchListener);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        parentView.addView(addTextRootView, params);
-        addedViews.add(addTextRootView);
+        addTextView.setOnTouchListener(multiTouchListener);
         if (onPhotoEditorSDKListener != null)
             onPhotoEditorSDKListener.onAddViewListener(ViewType.TEXT, addedViews.size());
 

@@ -17,7 +17,7 @@ class MultiTouchListener implements OnTouchListener {
     private float minimumScale = 0.5f;
     private float maximumScale = 10.0f;
     private int mActivePointerId = INVALID_POINTER_ID;
-    private float mPrevX, mPrevY, mPrevRawX, mPrevRawY;
+    private float mPrevX, mPrevY, mPrevRawX, mPrevRawY, mDefaultY, mDefaultX;
     private ScaleGestureDetector mScaleGestureDetector;
 
     private int[] location = new int[2];
@@ -106,6 +106,8 @@ class MultiTouchListener implements OnTouchListener {
 
         switch (action & event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+                mDefaultY = view.getY();
+                mDefaultX = view.getX();
                 mPrevX = event.getX();
                 mPrevY = event.getY();
                 mPrevRawX = event.getRawX();
@@ -134,7 +136,8 @@ class MultiTouchListener implements OnTouchListener {
                     if (onMultiTouchListener != null)
                         onMultiTouchListener.onRemoveViewListener(view);
                 } else if (!isViewInBounds(photoEditImageView, x, y)) {
-                    view.animate().translationY(0).translationY(0);
+                    view.animate().translationY(mDefaultY).translationY(mDefaultY);
+                    view.animate().translationX(mDefaultX).translationX(mDefaultX);
                 }
                 deleteView.setVisibility(View.GONE);
                 firePhotoEditorSDKListener(view, false);
@@ -148,7 +151,7 @@ class MultiTouchListener implements OnTouchListener {
                         }
                         if (onPhotoEditorSDKListener != null) {
                             onPhotoEditorSDKListener.onEditTextChangeListener(
-                                    ((TextView) view).getText().toString(), ((TextView) view).getCurrentTextColor());
+                                    (TextView) view);
                         }
                     }
                 }
