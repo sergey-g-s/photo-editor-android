@@ -100,17 +100,20 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addTextView.setText(text);
         addTextView.setTypeface(font);
         addTextView.setTextSize(fontSize);
-        addTextView.setX(x);
         addTextView.setShadowLayer(1.5f, -1, 1, Color.LTGRAY);;
         addTextView.setY(y);
         addTextView.setPadding(0,0,0,0);
         addTextView.setTextColor(Color.parseColor(textColor));
         addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
+        int viewWidth = addTextView.getWidth();
+        addTextView.setX(x <= viewWidth ? x : x - viewWidth);
         if (width > 0) {
             addTextView.setWidth(width);
         }
         addTextView.setGravity(Gravity.CENTER_VERTICAL);
-        addTextView.setCompoundDrawablesWithIntrinsicBounds(icon, null , null, null);
+        if(icon != null){
+            addTextView.setCompoundDrawablesWithIntrinsicBounds(icon, null , null, null);
+        }
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
