@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -93,10 +94,10 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             onPhotoEditorSDKListener.onAddViewListener(ViewType.TEXT, addedViews.size());
     }
 
-    public void addStickers(String text, Typeface font, Drawable icon, int fontSize, int x, int y, String textColor, String backgroundColor, int width) {
+    public void addStickers(String text, Typeface font, Drawable icon, int fontSize, final int x, int y, String textColor, String backgroundColor, int width) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
-        TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
+        final TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
         addTextView.setText(text);
         addTextView.setTypeface(font);
         addTextView.setTextSize(fontSize);
@@ -105,8 +106,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addTextView.setPadding(0,0,0,0);
         addTextView.setTextColor(Color.parseColor(textColor));
         addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
-        int viewWidth = addTextView.getWidth();
-        addTextView.setX(x <= viewWidth ? x : x - viewWidth);
+
         if (width > 0) {
             addTextView.setWidth(width);
         }
@@ -114,6 +114,15 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         if(icon != null){
             addTextView.setCompoundDrawablesWithIntrinsicBounds(icon, null , null, null);
         }
+        addTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                addTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int viewWidth = addTextView.getWidth();
+                addTextView.setX(x <= viewWidth ? x : x - viewWidth);
+            }
+        });
+
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
