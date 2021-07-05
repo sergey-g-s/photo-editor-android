@@ -67,6 +67,27 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             onPhotoEditorSDKListener.onAddViewListener(ViewType.IMAGE, addedViews.size());
     }
 
+    public void addView(final int x, int y, int height, int width) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View viewRootView = inflater.inflate(R.layout.photo_editor_sdk_view_item_list, null);
+        final View view = (View) viewRootView.findViewById(R.id.photo_editor_sdk_view_test__iv);
+        view.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+        view.setBackgroundColor(Color.WHITE);
+        viewRootView.setY(y);
+        viewRootView.setX(x <= width ? x : x - width);
+
+        MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
+                parentView, this.imageView, onPhotoEditorSDKListener);
+        multiTouchListener.setOnMultiTouchListener(this);
+        viewRootView.setOnTouchListener(multiTouchListener);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        parentView.addView(viewRootView, params);
+        addedViews.add(viewRootView);
+        if (onPhotoEditorSDKListener != null)
+            onPhotoEditorSDKListener.onAddViewListener(ViewType.VIEW, addedViews.size());
+    }
+
     public void addText(TextView textView) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
@@ -113,6 +134,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addTextView.setGravity(Gravity.CENTER_VERTICAL);
         if(icon != null){
             addTextView.setCompoundDrawablesWithIntrinsicBounds(icon, null , null, null);
+            addTextView.setCompoundDrawablePadding(3);
         }
         addTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/photo_editor_sdk_view_iv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <View
+        android:id="@+id/photo_editor_sdk_view_test__iv"
+        android:layout_width="100dp"
+        android:layout_height="10dp"
+        android:background="#000"
+        android:contentDescription="@string/app_name" />
+</RelativeLayout>

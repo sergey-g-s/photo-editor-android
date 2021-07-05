@@ -192,6 +192,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 Bitmap testimg = ((BitmapDrawable) img).getBitmap();
                 Drawable icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(testimg, convertDpToPixel(10), convertDpToPixel(10), false));
 
+                photoEditorSDK.addView(convertDpToPixel(170), top + convertDpToPixel(50), 1, 600);
+
                 photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#ffffff", "#33ffffff",  convertDpToPixel(0));
             }
         }.start();
