@@ -22,6 +22,7 @@ class MultiTouchListener implements OnTouchListener {
 
     private int[] location = new int[2];
     private Rect outRect;
+    private boolean editable;
     private View deleteView;
     private ImageView photoEditImageView;
     private RelativeLayout parentView;
@@ -30,10 +31,11 @@ class MultiTouchListener implements OnTouchListener {
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
     MultiTouchListener(View deleteView, RelativeLayout parentView,
-                       ImageView photoEditImageView, OnPhotoEditorSDKListener onPhotoEditorSDKListener) {
+                       ImageView photoEditImageView, OnPhotoEditorSDKListener onPhotoEditorSDKListener, boolean editable) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
         this.parentView = parentView;
+        this.editable = editable;
         this.photoEditImageView = photoEditImageView;
         this.onPhotoEditorSDKListener = onPhotoEditorSDKListener;
         outRect = new Rect(deleteView.getLeft(), deleteView.getTop(),
@@ -144,14 +146,16 @@ class MultiTouchListener implements OnTouchListener {
                 float mCurrentCancelX = event.getRawX();
                 float mCurrentCancelY = event.getRawY();
                 if (mCurrentCancelX == mPrevRawX || mCurrentCancelY == mPrevRawY) {
-                    if (view instanceof TextView) {
-                        if (onMultiTouchListener != null) {
-                            onMultiTouchListener.onEditTextClickListener(
-                                    ((TextView) view).getText().toString(), ((TextView) view).getCurrentTextColor());
-                        }
-                        if (onPhotoEditorSDKListener != null) {
-                            onPhotoEditorSDKListener.onEditTextChangeListener(
-                                    (TextView) view);
+                    if(this.editable){
+                        if (view instanceof TextView) {
+                            if (onMultiTouchListener != null) {
+                                onMultiTouchListener.onEditTextClickListener(
+                                        ((TextView) view).getText().toString(), ((TextView) view).getCurrentTextColor());
+                            }
+                            if (onPhotoEditorSDKListener != null) {
+                                onPhotoEditorSDKListener.onEditTextChangeListener(
+                                        (TextView) view);
+                            }
                         }
                     }
                 }

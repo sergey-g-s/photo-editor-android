@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -192,9 +194,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 Bitmap testimg = ((BitmapDrawable) img).getBitmap();
                 Drawable icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(testimg, convertDpToPixel(10), convertDpToPixel(10), false));
 
-                photoEditorSDK.addView(convertDpToPixel(170), top + convertDpToPixel(50), 1, 600);
+                photoEditorSDK.addView(convertDpToPixel(170), top + convertDpToPixel(50), 1, 600, false);
 
-                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#ffffff", "#33ffffff",  convertDpToPixel(0));
+                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#ffffff", "#33ffffff",  convertDpToPixel(0), 2,true, true);
             }
         }.start();
     }
@@ -224,8 +226,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
 
-    private void addText(TextView textView) {
-        photoEditorSDK.addText(textView);
+    private void addText(TextView textView, String text, int color) {
+        Typeface tf = Typeface.createFromAsset(getAssets(),
+                "Eventtus-Icons.ttf");
+        photoEditorSDK.addText(textView, text, color, tf);
     }
 
     private void clearAllViews() {
@@ -241,10 +245,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void openAddTextPopupWindow(final TextView textView) {
-        if(textView != null){
-            return;
-        }
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View addTextPopupWindowRootView = inflater.inflate(R.layout.add_text_popup_window, null);
         final EditText addTextEditText = (EditText) addTextPopupWindowRootView.findViewById(R.id.add_text_edit_text);
@@ -263,11 +263,18 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         });
         addTextColorPickerRecyclerView.setAdapter(colorPickerAdapter);
         if (textView != null && stringIsNotEmpty((String) textView.getText())) {
+            float sp = textView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
             addTextEditText.setText(textView.getText());
             addTextEditText.setTypeface(textView.getTypeface());
             addTextEditText.setTypeface(textView.getTypeface());
             addTextEditText.setTextColor(textView.getTextColors());
-            addTextEditText.setTextSize(textView.getTextSize());
+            addTextEditText.setPadding(0,textView.getPaddingTop(),0, textView.getPaddingBottom());
+            addTextEditText.setTextSize(sp);
+            Drawable test = (Drawable) textView.getCompoundDrawables()[0];
+            int h = test.getIntrinsicHeight();
+            int w = test.getIntrinsicWidth();
+            test.setBounds( 0, 0, w, h );
+            addTextEditText.setCompoundDrawables(test, null , null, null );
         }
         final PopupWindow pop = new PopupWindow(PhotoEditorActivity.this);
         pop.setContentView(addTextPopupWindowRootView);
@@ -281,7 +288,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         addTextDoneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addText(addTextEditText);
+                addText(textView, addTextEditText.getText().toString(), colorCodeTextView);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 pop.dismiss();
@@ -351,7 +358,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         } else if (v.getId() == R.id.add_image_emoji_tv) {
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         } else if (v.getId() == R.id.add_text_tv) {
-            openAddTextPopupWindow(EmptyView);
+            openAddTextPopupWindow(null);
         } else if (v.getId() == R.id.add_pencil_tv) {
             updateBrushDrawingView(true);
         } else if (v.getId() == R.id.done_drawing_tv) {
