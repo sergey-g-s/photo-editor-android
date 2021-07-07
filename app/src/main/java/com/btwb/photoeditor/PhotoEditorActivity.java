@@ -196,7 +196,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
                 photoEditorSDK.addView(convertDpToPixel(170), top + convertDpToPixel(50), 1, 600, false);
 
-                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#ffffff", "#33ffffff",  convertDpToPixel(0), 2,true, true);
+                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#ffffff", "#33ffffff",  convertDpToPixel(400), 2,true, true);
                 photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#ffffff", "#33ffffff",  convertDpToPixel(0), 2,true, true);
             }
         }.start();
@@ -227,10 +227,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
 
-    private void addText(TextView textView, String text, int color) {
+    private void addText(TextView textView, String text, int color, int width) {
         Typeface tf = Typeface.createFromAsset(getAssets(),
                 "Eventtus-Icons.ttf");
-        photoEditorSDK.addText(textView, text, color, tf);
+        photoEditorSDK.addText(textView, text, color, tf, width);
     }
 
     private void clearAllViews() {
@@ -245,7 +245,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         photoEditorSDK.brushEraser();
     }
 
-    private void openAddTextPopupWindow(final TextView textView) {
+    private void openAddTextPopupWindow(final TextView textView, final int width) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View addTextPopupWindowRootView = inflater.inflate(R.layout.add_text_popup_window, null);
         final EditText addTextEditText = (EditText) addTextPopupWindowRootView.findViewById(R.id.add_text_edit_text);
@@ -292,7 +292,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         addTextDoneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addText(textView, addTextEditText.getText().toString(), colorCodeTextView);
+                addText(textView, addTextEditText.getText().toString(), colorCodeTextView, width);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 pop.dismiss();
@@ -362,7 +362,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         } else if (v.getId() == R.id.add_image_emoji_tv) {
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         } else if (v.getId() == R.id.add_text_tv) {
-            openAddTextPopupWindow(null);
+            openAddTextPopupWindow(null, 0);
         } else if (v.getId() == R.id.add_pencil_tv) {
             updateBrushDrawingView(true);
         } else if (v.getId() == R.id.done_drawing_tv) {
@@ -379,8 +379,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onEditTextChangeListener(TextView textView) {
-        openAddTextPopupWindow(textView);
+    public void onEditTextChangeListener(TextView textView, int width) {
+        openAddTextPopupWindow(textView, width);
     }
 
     @Override

@@ -21,6 +21,7 @@ class MultiTouchListener implements OnTouchListener {
     private ScaleGestureDetector mScaleGestureDetector;
 
     private int[] location = new int[2];
+    private int width;
     private Rect outRect;
     private boolean editable;
     private View deleteView;
@@ -31,11 +32,12 @@ class MultiTouchListener implements OnTouchListener {
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
     MultiTouchListener(View deleteView, RelativeLayout parentView,
-                       ImageView photoEditImageView, OnPhotoEditorSDKListener onPhotoEditorSDKListener, boolean editable) {
+                       ImageView photoEditImageView, OnPhotoEditorSDKListener onPhotoEditorSDKListener,int width, boolean editable) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
         this.parentView = parentView;
         this.editable = editable;
+        this.width = width;
         this.photoEditImageView = photoEditImageView;
         this.onPhotoEditorSDKListener = onPhotoEditorSDKListener;
         outRect = new Rect(deleteView.getLeft(), deleteView.getTop(),
@@ -154,7 +156,7 @@ class MultiTouchListener implements OnTouchListener {
                             }
                             if (onPhotoEditorSDKListener != null) {
                                 onPhotoEditorSDKListener.onEditTextChangeListener(
-                                        (TextView) view);
+                                        (TextView) view, width);
                             }
                         }
                     }

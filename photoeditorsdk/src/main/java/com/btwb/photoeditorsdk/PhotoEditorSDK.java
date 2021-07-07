@@ -56,7 +56,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT));
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener, false);
+                parentView, this.imageView, onPhotoEditorSDKListener, 0,false);
         multiTouchListener.setOnMultiTouchListener(this);
         imageRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -81,7 +81,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener, false);
+                parentView, this.imageView, onPhotoEditorSDKListener, 0,false);
         multiTouchListener.setOnMultiTouchListener(this);
         viewRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -95,7 +95,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             onPhotoEditorSDKListener.onAddViewListener(ViewType.VIEW, addedViews.size());
     }
 
-    public void addText(TextView textView, String text, int color, Typeface fontTextView) {
+    public void addText(TextView textView, String text, int color, Typeface fontTextView, int width) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
         TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
@@ -104,8 +104,11 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             addTextView.setTypeface(textView.getTypeface());
             addTextView.setTextSize(sp);
             addTextView.setTextColor(textView.getTextColors());
-            addTextView.setGravity(Gravity.CENTER);
+            addTextView.setGravity(Gravity.CENTER_VERTICAL);
             addTextView.setText(text);
+            if (width > 0){
+                addTextView.setWidth(width);
+            }
             addTextView.setPadding(0,textView.getPaddingTop(),0, textView.getPaddingBottom());
             if (textView.getBackground() instanceof ColorDrawable) {
                 ColorDrawable cd = (ColorDrawable) textView.getBackground();
@@ -130,7 +133,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener, true);
+                parentView, this.imageView, onPhotoEditorSDKListener,0, true);
         multiTouchListener.setOnMultiTouchListener(this);
         addTextRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -188,7 +191,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         parentView.addView(addTextView, params);
         addedViews.add(addTextView);
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                    parentView, this.imageView, onPhotoEditorSDKListener, editable);
+                    parentView, this.imageView, onPhotoEditorSDKListener, width,editable);
             multiTouchListener.setOnMultiTouchListener(this);
             addTextView.setOnTouchListener(multiTouchListener);
             if (onPhotoEditorSDKListener != null)
@@ -204,7 +207,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         emojiTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         emojiTextView.setText(convertEmoji(emojiName));
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener, false);
+                parentView, this.imageView, onPhotoEditorSDKListener, 0,false);
         multiTouchListener.setOnMultiTouchListener(this);
         emojiRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 public interface OnPhotoEditorSDKListener {
 
-    void onEditTextChangeListener(TextView textView);
+    void onEditTextChangeListener(TextView textView, int width);
 
     void onAddViewListener(ViewType viewType, int numberOfAddedViews);
 
