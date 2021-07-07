@@ -116,7 +116,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             if (width > 0){
                 addTextView.setWidth(width);
             }
-            addTextView.setPadding(0,textView.getPaddingTop(),0, textView.getPaddingBottom());
+            addTextView.setPadding(textView.getPaddingLeft(),textView.getPaddingTop(),textView.getPaddingRight(), textView.getPaddingBottom());
             if (textView.getBackground() instanceof ColorDrawable) {
                 ColorDrawable cd = (ColorDrawable) textView.getBackground();
                 int colorCode = cd.getColor();
