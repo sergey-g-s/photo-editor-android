@@ -8,6 +8,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.annotation.ColorInt;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -95,6 +98,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             onPhotoEditorSDKListener.onAddViewListener(ViewType.VIEW, addedViews.size());
     }
 
+
     public void addText(TextView textView, String text, int color, Typeface fontTextView, int width) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
@@ -133,7 +137,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener,0, true);
+                parentView, this.imageView, onPhotoEditorSDKListener,width, true);
         multiTouchListener.setOnMultiTouchListener(this);
         addTextRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -145,7 +149,20 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             onPhotoEditorSDKListener.onAddViewListener(ViewType.TEXT, addedViews.size());
     }
 
-    public void addStickers(String text, Typeface font, Drawable icon, int fontSize, final int x, int y, String textColor, String backgroundColor, int width, int paddingVertical,boolean editable, boolean center) {
+    public void addStickers(String text,
+                            Typeface font,
+                            Drawable icon,
+                            int fontSize,
+                            final int x,
+                            int y,
+                            String textColor,
+                            String backgroundColor,
+                            int width,
+                            int paddingVertical,
+                            boolean editable,
+                            boolean center,
+                            String rightText
+    ) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
         final TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
@@ -158,6 +175,18 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addTextView.setPadding(0,paddingVertical,0,paddingVertical);
         addTextView.setTextColor(Color.parseColor(textColor));
         addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
+
+        if(rightText != null){
+            Spannable word = new SpannableString(text);
+
+            word.setSpan(new ForegroundColorSpan(Color.WHITE), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            addTextView.setText(word);
+            Spannable wordTwo = new SpannableString(rightText);
+
+            wordTwo.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorGreen)), 0, wordTwo.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            addTextView.append(wordTwo);
+        }
 
         if (width > 0) {
             addTextView.setWidth(width);

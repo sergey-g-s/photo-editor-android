@@ -21,6 +21,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -191,13 +196,18 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
                 int top = photoEditImageView.getTop();
 
-                Bitmap testimg = ((BitmapDrawable) img).getBitmap();
-                Drawable icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(testimg, convertDpToPixel(10), convertDpToPixel(10), false));
 
                 photoEditorSDK.addView(convertDpToPixel(170), top + convertDpToPixel(50), 1, 600, false);
 
-                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#ffffff", "#33ffffff",  convertDpToPixel(400), 2,true, true);
-                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#ffffff", "#33ffffff",  convertDpToPixel(0), 2,true, true);
+
+                Bitmap testimg = ((BitmapDrawable) img).getBitmap();
+                Drawable icon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(testimg, convertDpToPixel(10), convertDpToPixel(10), false));
+
+
+
+
+                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#000000", "#33ffffff",  convertDpToPixel(100), 2,true, true, null);
+                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#000000", "#33ffffff",  convertDpToPixel(0), 2,true, true,"  TEST TEST");
             }
         }.start();
     }
@@ -262,8 +272,26 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 colorCodeTextView = colorCode;
             }
         });
+
+        addTextEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                System.out.println("beforeTextChanged: " + charSequence + " " + i + " " + i1 + " " + i2);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                System.out.println("onTextChanged: " + charSequence + " " + i + " " + i1 + " " + i2);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                System.out.println("afterTextChanged: " + editable);
+            }
+        });
+
         addTextColorPickerRecyclerView.setAdapter(colorPickerAdapter);
-        if (textView != null && stringIsNotEmpty((String) textView.getText())) {
+        if (textView != null) {
             float sp = textView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
             addTextEditText.setText(textView.getText());
             addTextEditText.setTypeface(textView.getTypeface());
@@ -280,6 +308,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             }
 
         }
+//        Spannable spannable = addTextEditText.getText();
+//        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue_color_picker)), 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         final PopupWindow pop = new PopupWindow(PhotoEditorActivity.this);
         pop.setContentView(addTextPopupWindowRootView);
         pop.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
