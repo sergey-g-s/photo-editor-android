@@ -197,6 +197,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 photoEditorSDK.addView(convertDpToPixel(170), top + convertDpToPixel(50), 1, 600, false);
 
                 photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#ffffff", "#33ffffff",  convertDpToPixel(0), 2,true, true);
+                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#ffffff", "#33ffffff",  convertDpToPixel(0), 2,true, true);
             }
         }.start();
     }
@@ -270,11 +271,14 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             addTextEditText.setTextColor(textView.getTextColors());
             addTextEditText.setPadding(0,textView.getPaddingTop(),0, textView.getPaddingBottom());
             addTextEditText.setTextSize(sp);
-            Drawable test = (Drawable) textView.getCompoundDrawables()[0];
-            int h = test.getIntrinsicHeight();
-            int w = test.getIntrinsicWidth();
-            test.setBounds( 0, 0, w, h );
-            addTextEditText.setCompoundDrawables(test, null , null, null );
+            Drawable icon = (Drawable) textView.getCompoundDrawables()[0];
+            if(icon !=null){
+                int h = icon.getIntrinsicHeight();
+                int w = icon.getIntrinsicWidth();
+                icon.setBounds( 0, 0, w, h );
+                addTextEditText.setCompoundDrawables(icon, null , null, null );
+            }
+
         }
         final PopupWindow pop = new PopupWindow(PhotoEditorActivity.this);
         pop.setContentView(addTextPopupWindowRootView);

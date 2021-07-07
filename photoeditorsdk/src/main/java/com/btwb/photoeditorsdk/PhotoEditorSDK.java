@@ -99,7 +99,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
         TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
-        if(textView  !=null){
+        if(textView != null){
             float sp = textView.getTextSize() / context.getResources().getDisplayMetrics().scaledDensity;
             addTextView.setTypeface(textView.getTypeface());
             addTextView.setTextSize(sp);
@@ -112,12 +112,12 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                 int colorCode = cd.getColor();
                 addTextView.setBackgroundColor(colorCode);
             }
-            Drawable test = (Drawable) textView.getCompoundDrawables()[0];
-            if(test != null){
-                int h = test.getIntrinsicHeight();
-                int w = test.getIntrinsicWidth();
-                test.setBounds( 0, 0, w, h );
-                addTextView.setCompoundDrawables(test, null, null, null );
+            Drawable icon = (Drawable) textView.getCompoundDrawables()[0];
+            if(icon != null){
+                int h = icon.getIntrinsicHeight();
+                int w = icon.getIntrinsicWidth();
+                icon.setBounds( 0, 0, w, h );
+                addTextView.setCompoundDrawables(icon, null, null, null );
             }
 
         }
@@ -136,9 +136,6 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        if(addTextRootView.getParent() != null) {
-            ((ViewGroup)addTextRootView.getParent()).removeView(textView); // <- fix
-        }
         parentView.addView(addTextRootView, params);
         addedViews.add(addTextRootView);
         if (onPhotoEditorSDKListener != null)
@@ -355,10 +352,10 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
     }
 
     @Override
-    public void onEditTextClickListener(String text, int colorCode) {
+    public void onEditTextClickListener(TextView view) {
         if (addTextRootView != null) {
-            parentView.removeView(addTextRootView);
-            addedViews.remove(addTextRootView);
+            parentView.removeView(view);
+            addedViews.remove(view);
         }
     }
 
