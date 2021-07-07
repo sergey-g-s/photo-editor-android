@@ -34,7 +34,7 @@ import java.util.List;
 public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
     private Context context;
-    private RelativeLayout parentView;
+    private RelativeLayout parentView, activeView;
     private ImageView imageView;
     private View deleteView;
     private BrushDrawingView brushDrawingView;
@@ -45,6 +45,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
     private PhotoEditorSDK(PhotoEditorSDKBuilder photoEditorSDKBuilder) {
         this.context = photoEditorSDKBuilder.context;
         this.parentView = photoEditorSDKBuilder.parentView;
+        this.activeView = photoEditorSDKBuilder.activeView;
         this.imageView = photoEditorSDKBuilder.imageView;
         this.deleteView = photoEditorSDKBuilder.deleteView;
         this.brushDrawingView = photoEditorSDKBuilder.brushDrawingView;
@@ -59,7 +60,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT));
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener, 0,false);
+                parentView,activeView, this.imageView, onPhotoEditorSDKListener, 0,false);
         multiTouchListener.setOnMultiTouchListener(this);
         imageRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -84,7 +85,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener, 0,false);
+                parentView,activeView, this.imageView, onPhotoEditorSDKListener, 0,false);
         multiTouchListener.setOnMultiTouchListener(this);
         viewRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -137,7 +138,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener,width, true);
+                parentView,activeView, this.imageView, onPhotoEditorSDKListener,width, true);
         multiTouchListener.setOnMultiTouchListener(this);
         addTextRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -159,6 +160,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                             String backgroundColor,
                             int width,
                             int paddingVertical,
+                            int paddingHorizontal,
                             boolean editable,
                             boolean center,
                             String rightText
@@ -172,7 +174,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addTextView.setTextSize(fontSize);
         addTextView.setShadowLayer(1.5f, -1, 1, Color.LTGRAY);;
         if(!center) addTextView.setY(y);
-        addTextView.setPadding(0,paddingVertical,0,paddingVertical);
+        addTextView.setPadding(paddingHorizontal,paddingVertical,paddingHorizontal,paddingVertical);
         addTextView.setTextColor(Color.parseColor(textColor));
         addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
 
@@ -220,7 +222,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         parentView.addView(addTextView, params);
         addedViews.add(addTextView);
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                    parentView, this.imageView, onPhotoEditorSDKListener, width,editable);
+                    parentView,activeView, this.imageView, onPhotoEditorSDKListener, width,editable);
             multiTouchListener.setOnMultiTouchListener(this);
             addTextView.setOnTouchListener(multiTouchListener);
             if (onPhotoEditorSDKListener != null)
@@ -236,7 +238,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         emojiTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         emojiTextView.setText(convertEmoji(emojiName));
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView, this.imageView, onPhotoEditorSDKListener, 0,false);
+                parentView,activeView ,this.imageView, onPhotoEditorSDKListener, 0,false);
         multiTouchListener.setOnMultiTouchListener(this);
         emojiRootView.setOnTouchListener(multiTouchListener);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -399,7 +401,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
     public static class PhotoEditorSDKBuilder {
 
         private Context context;
-        private RelativeLayout parentView;
+        private RelativeLayout parentView, activeView;
         private ImageView imageView;
         private View deleteView;
         private BrushDrawingView brushDrawingView;
@@ -410,6 +412,11 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
         public PhotoEditorSDKBuilder parentView(RelativeLayout parentView) {
             this.parentView = parentView;
+            return this;
+        }
+
+        public PhotoEditorSDKBuilder activeView(RelativeLayout activeView) {
+            this.activeView = activeView;
             return this;
         }
 

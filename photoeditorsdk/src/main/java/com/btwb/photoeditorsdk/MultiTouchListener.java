@@ -26,16 +26,17 @@ class MultiTouchListener implements OnTouchListener {
     private boolean editable;
     private View deleteView;
     private ImageView photoEditImageView;
-    private RelativeLayout parentView;
+    private RelativeLayout parentView, activeView;
 
     private OnMultiTouchListener onMultiTouchListener;
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
-    MultiTouchListener(View deleteView, RelativeLayout parentView,
+    MultiTouchListener(View deleteView, RelativeLayout parentView,RelativeLayout activeView,
                        ImageView photoEditImageView, OnPhotoEditorSDKListener onPhotoEditorSDKListener,int width, boolean editable) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
         this.parentView = parentView;
+        this.activeView = activeView;
         this.editable = editable;
         this.width = width;
         this.photoEditImageView = photoEditImageView;
@@ -118,6 +119,7 @@ class MultiTouchListener implements OnTouchListener {
                 mPrevRawY = event.getRawY();
                 mActivePointerId = event.getPointerId(0);
                 deleteView.setVisibility(View.VISIBLE);
+                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -144,6 +146,7 @@ class MultiTouchListener implements OnTouchListener {
                     view.animate().translationX(mDefaultX).translationX(mDefaultX);
                 }
                 deleteView.setVisibility(View.GONE);
+                activeView.setVisibility(View.VISIBLE);
                 firePhotoEditorSDKListener(view, false);
                 float mCurrentCancelX = event.getRawX();
                 float mCurrentCancelY = event.getRawY();

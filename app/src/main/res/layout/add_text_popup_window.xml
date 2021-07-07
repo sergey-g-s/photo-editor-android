@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -19,17 +21,19 @@
         android:textColor="@color/white"
         android:textSize="15sp" />
 
-    <EditText
+    <br.com.sapereaude.maskedEditText.MaskedEditText
         android:id="@+id/add_text_edit_text"
-        style="@style/EditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_above="@+id/add_text_color_picker_relative_layout"
         android:layout_below="@+id/add_text_done_tv"
-        android:background="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        mask:mask="April 12, 2021 - ###########"
+        app:keep_hint="true"
         android:gravity="center"
+        android:background="@null"
         android:layout_centerHorizontal="true"
         android:inputType="textMultiLine"
+        style="@style/EditText"
         />
 
     <RelativeLayout
