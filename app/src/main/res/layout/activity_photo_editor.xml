@@ -299,6 +299,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/image_emoji_indicator" />
 
+
         </RelativeLayout>
 
     </com.btwb.photoeditor.widget.SlidingUpPanelLayout>

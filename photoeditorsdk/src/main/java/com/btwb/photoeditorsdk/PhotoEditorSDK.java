@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,7 +35,8 @@ import java.util.List;
 public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
     private Context context;
-    private RelativeLayout parentView, activeView;
+    private RelativeLayout parentView;
+    private LinearLayout activeView;
     private ImageView imageView;
     private View deleteView;
     private BrushDrawingView brushDrawingView;
@@ -401,7 +403,8 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
     public static class PhotoEditorSDKBuilder {
 
         private Context context;
-        private RelativeLayout parentView, activeView;
+        private RelativeLayout parentView;
+        private LinearLayout activeView;
         private ImageView imageView;
         private View deleteView;
         private BrushDrawingView brushDrawingView;
@@ -415,7 +418,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             return this;
         }
 
-        public PhotoEditorSDKBuilder activeView(RelativeLayout activeView) {
+        public PhotoEditorSDKBuilder activeView(LinearLayout activeView) {
             this.activeView = activeView;
             return this;
         }

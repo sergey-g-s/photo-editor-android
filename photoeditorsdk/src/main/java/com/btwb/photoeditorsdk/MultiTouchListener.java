@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,12 +27,13 @@ class MultiTouchListener implements OnTouchListener {
     private boolean editable;
     private View deleteView;
     private ImageView photoEditImageView;
-    private RelativeLayout parentView, activeView;
+    private RelativeLayout parentView;
+    private LinearLayout  activeView;
 
     private OnMultiTouchListener onMultiTouchListener;
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
-    MultiTouchListener(View deleteView, RelativeLayout parentView,RelativeLayout activeView,
+    MultiTouchListener(View deleteView, RelativeLayout parentView,LinearLayout activeView,
                        ImageView photoEditImageView, OnPhotoEditorSDKListener onPhotoEditorSDKListener,int width, boolean editable) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
