@@ -11,6 +11,7 @@ import android.support.annotation.ColorInt;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -156,6 +157,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                             Typeface font,
                             String type,
                             Drawable icon,
+                            int iconHorizontal,
                             int fontSize,
                             final int x,
                             int y,
@@ -201,7 +203,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             int w = icon.getIntrinsicWidth();
             icon.setBounds( 0, 0, w, h );
             addTextView.setCompoundDrawables(icon, null , null, null);
-            addTextView.setCompoundDrawablePadding(3);
+            addTextView.setCompoundDrawablePadding(convertDpToPixel(iconHorizontal));
         }
         if(!center){
             addTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -250,6 +252,10 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addedViews.add(emojiRootView);
         if (onPhotoEditorSDKListener != null)
             onPhotoEditorSDKListener.onAddViewListener(ViewType.EMOJI, addedViews.size());
+    }
+
+    public  int convertDpToPixel(float dp){
+        return Math.round(dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     public void setBrushDrawingMode(boolean brushDrawingMode) {
