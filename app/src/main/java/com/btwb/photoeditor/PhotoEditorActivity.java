@@ -1,15 +1,12 @@
 package com.btwb.photoeditor;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,10 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Html;
-import android.text.Spannable;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -207,8 +201,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
 
 
-                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#000000", "#33ffffff",  convertDpToPixel(100), 2,8,true, true, null);
-                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), icon, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#000000", "#33ffffff",  convertDpToPixel(0), 2,8,true, true,"  TEST TEST");
+                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "date",icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#000000", "#33ffffff",  convertDpToPixel(100), 2,8,true, true, null);
+                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#000000", "#33ffffff",  convertDpToPixel(0), 2,8,true, true,"  TEST TEST");
             }
         }.start();
     }
@@ -238,10 +232,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
 
-    private void addText(TextView textView, String text, int color, int width) {
+    private void addText(TextView textView, String text, int color, int width, String type) {
         Typeface tf = Typeface.createFromAsset(getAssets(),
                 "Eventtus-Icons.ttf");
-        photoEditorSDK.addText(textView, text, color, tf, width);
+        photoEditorSDK.addText(textView, text, color, tf, width, type);
     }
 
     private void clearAllViews() {
@@ -256,7 +250,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         photoEditorSDK.brushEraser();
     }
 
-    private void openAddTextPopupWindow(final TextView textView, final int width) {
+    private void openAddTextPopupWindow(final TextView textView, final int width, final String type) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View addTextPopupWindowRootView = inflater.inflate(R.layout.add_text_popup_window, null);
         final EditText addTextEditText = (EditText) addTextPopupWindowRootView.findViewById(R.id.add_text_edit_text);
@@ -271,23 +265,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             public void onColorPickerClickListener(int colorCode) {
                 addTextEditText.setTextColor(colorCode);
                 colorCodeTextView = colorCode;
-            }
-        });
-
-        addTextEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                System.out.println("beforeTextChanged: " + charSequence + " " + i + " " + i1 + " " + i2);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                System.out.println("onTextChanged: " + charSequence + " " + i + " " + i1 + " " + i2);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                System.out.println("afterTextChanged: " + editable);
             }
         });
 
@@ -324,7 +301,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         addTextDoneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addText(textView, addTextEditText.getText().toString(), colorCodeTextView, width);
+                addText(textView, addTextEditText.getText().toString(), colorCodeTextView, width, type);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 pop.dismiss();
@@ -394,7 +371,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         } else if (v.getId() == R.id.add_image_emoji_tv) {
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
         } else if (v.getId() == R.id.add_text_tv) {
-            openAddTextPopupWindow(null, 0);
+            openAddTextPopupWindow(null, 0, "");
         } else if (v.getId() == R.id.add_pencil_tv) {
             updateBrushDrawingView(true);
         } else if (v.getId() == R.id.done_drawing_tv) {
@@ -411,8 +388,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onEditTextChangeListener(TextView textView, int width) {
-        openAddTextPopupWindow(textView, width);
+    public void onEditTextChangeListener(TextView textView, int width, String type) {
+        openAddTextPopupWindow(textView, width, type);
     }
 
     @Override
