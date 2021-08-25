@@ -121,8 +121,8 @@ class MultiTouchListener implements OnTouchListener {
                 mPrevRawX = event.getRawX();
                 mPrevRawY = event.getRawY();
                 mActivePointerId = event.getPointerId(0);
-//                deleteView.setVisibility(View.VISIBLE);
-//                activeView.setVisibility(View.GONE);
+                deleteView.setVisibility(View.VISIBLE);
+                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -147,8 +147,8 @@ class MultiTouchListener implements OnTouchListener {
                 } else if (!isViewInBounds(photoEditImageView, x, y)) {
                 view.animate().translationY(0).translationY(0);
                 }
-//                deleteView.setVisibility(View.GONE);
-//                activeView.setVisibility(View.VISIBLE);
+                deleteView.setVisibility(View.GONE);
+                activeView.setVisibility(View.VISIBLE);
                 firePhotoEditorSDKListener(view, false);
                 float mCurrentCancelX = event.getRawX();
                 float mCurrentCancelY = event.getRawY();
