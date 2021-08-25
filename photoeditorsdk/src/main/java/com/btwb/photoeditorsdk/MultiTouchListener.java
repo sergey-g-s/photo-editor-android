@@ -15,7 +15,6 @@ class MultiTouchListener implements OnTouchListener {
     private boolean isRotateEnabled = true;
     private boolean isTranslateEnabled = true;
     private boolean isScaleEnabled = true;
-    private float minimumScale = 0.5f;
     private float maximumScale = 10.0f;
     private int mActivePointerId = INVALID_POINTER_ID;
     private float mPrevX, mPrevY, mPrevRawX, mPrevRawY, mDefaultY, mDefaultX;
@@ -122,8 +121,8 @@ class MultiTouchListener implements OnTouchListener {
                 mPrevRawX = event.getRawX();
                 mPrevRawY = event.getRawY();
                 mActivePointerId = event.getPointerId(0);
-                deleteView.setVisibility(View.VISIBLE);
-                activeView.setVisibility(View.GONE);
+//                deleteView.setVisibility(View.VISIBLE);
+//                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -148,8 +147,8 @@ class MultiTouchListener implements OnTouchListener {
                 } else if (!isViewInBounds(photoEditImageView, x, y)) {
                 view.animate().translationY(0).translationY(0);
                 }
-                deleteView.setVisibility(View.GONE);
-                activeView.setVisibility(View.VISIBLE);
+//                deleteView.setVisibility(View.GONE);
+//                activeView.setVisibility(View.VISIBLE);
                 firePhotoEditorSDKListener(view, false);
                 float mCurrentCancelX = event.getRawX();
                 float mCurrentCancelY = event.getRawY();
@@ -244,7 +243,6 @@ class MultiTouchListener implements OnTouchListener {
             info.deltaY = isTranslateEnabled ? detector.getFocusY() - mPivotY : 0.0f;
             info.pivotX = mPivotX;
             info.pivotY = mPivotY;
-            info.minimumScale = minimumScale;
             info.maximumScale = maximumScale;
             move(view, info);
             return false;
