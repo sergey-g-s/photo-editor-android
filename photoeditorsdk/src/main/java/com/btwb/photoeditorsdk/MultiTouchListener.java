@@ -1,6 +1,7 @@
 package com.btwb.photoeditorsdk;
 
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -24,7 +25,7 @@ class MultiTouchListener implements OnTouchListener {
     private int width;
     private Rect outRect;
     private boolean editable;
-    private View deleteView;
+    private View deleteView, LeftLineView;
     private String type;
     private ImageView photoEditImageView;
     private RelativeLayout parentView;
@@ -33,10 +34,19 @@ class MultiTouchListener implements OnTouchListener {
     private OnMultiTouchListener onMultiTouchListener;
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
-    MultiTouchListener(View deleteView, RelativeLayout parentView,LinearLayout activeView,
-                       ImageView photoEditImageView, OnPhotoEditorSDKListener onPhotoEditorSDKListener,int width, boolean editable, String type) {
+    MultiTouchListener(View deleteView,
+                       RelativeLayout parentView,
+                       LinearLayout activeView,
+                       ImageView photoEditImageView,
+                       OnPhotoEditorSDKListener onPhotoEditorSDKListener,
+                       int width,
+                       boolean editable,
+                       String type,
+                       View LeftLineView
+    ) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
+        this.LeftLineView = LeftLineView;
         this.parentView = parentView;
         this.activeView = activeView;
         this.editable = editable;
@@ -121,8 +131,8 @@ class MultiTouchListener implements OnTouchListener {
                 mPrevRawX = event.getRawX();
                 mPrevRawY = event.getRawY();
                 mActivePointerId = event.getPointerId(0);
-                deleteView.setVisibility(View.VISIBLE);
-                activeView.setVisibility(View.GONE);
+//                deleteView.setVisibility(View.VISIBLE);
+//                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -134,6 +144,13 @@ class MultiTouchListener implements OnTouchListener {
                     if (!mScaleGestureDetector.isInProgress()) {
                         adjustTranslation(view, currX - mPrevX, currY - mPrevY);
                     }
+                    if(view.getX() > 10 && view.getX() < 50){
+                        this.LeftLineView.setVisibility(View.VISIBLE);
+                    }else {
+                        this.LeftLineView.setVisibility(View.GONE);
+                    }
+                    Log.d("currX", String.valueOf(view.getX()));
+                    Log.d("currY", String.valueOf(view.getY()));
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -141,14 +158,14 @@ class MultiTouchListener implements OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                 mActivePointerId = INVALID_POINTER_ID;
-                if (isViewInBounds(deleteView, x, y)) {
-                    if (onMultiTouchListener != null)
-                        onMultiTouchListener.onRemoveViewListener(view);
-                } else if (!isViewInBounds(photoEditImageView, x, y)) {
-                view.animate().translationY(0).translationY(0);
-                }
-                deleteView.setVisibility(View.GONE);
-                activeView.setVisibility(View.VISIBLE);
+//                if (isViewInBounds(deleteView, x, y)) {
+//                    if (onMultiTouchListener != null)
+//                        onMultiTouchListener.onRemoveViewListener(view);
+//                } else if (!isViewInBounds(photoEditImageView, x, y)) {
+//                view.animate().translationY(0).translationY(0);
+//                }
+//                deleteView.setVisibility(View.GONE);
+//                activeView.setVisibility(View.VISIBLE);
                 firePhotoEditorSDKListener(view, false);
                 float mCurrentCancelX = event.getRawX();
                 float mCurrentCancelY = event.getRawY();

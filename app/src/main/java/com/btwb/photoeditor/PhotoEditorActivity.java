@@ -55,7 +55,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private Typeface emojiFont;
     private View topShadow;
     private RelativeLayout topShadowRelativeLayout;
-    private View bottomShadow;
+    private View bottomShadow, leftVerticalLine;
     private RelativeLayout bottomShadowRelativeLayout;
     private ArrayList<Integer> colorPickerColors;
     private int colorCodeTextView = -1;
@@ -97,6 +97,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         topShadow = findViewById(R.id.top_shadow);
         topShadowRelativeLayout = (RelativeLayout) findViewById(R.id.top_parent_rl);
         bottomShadow = findViewById(R.id.bottom_shadow);
+        leftVerticalLine = findViewById(R.id.leftVerticalLine);
         bottomShadowRelativeLayout = (RelativeLayout) findViewById(R.id.bottom_parent_rl);
 
         ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
@@ -124,6 +125,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         photoEditorSDK = new PhotoEditorSDK.PhotoEditorSDKBuilder(PhotoEditorActivity.this)
                 .parentView(parentImageRelativeLayout) // add parent image view
+//                .line(leftVerticalLine)
                 .childView(photoEditImageView) // add the desired image view
                 .activeView(null) // add the desired image view
                 .deleteView(deleteRelativeLayout) // add the deleted view that will appear during the movement of the views

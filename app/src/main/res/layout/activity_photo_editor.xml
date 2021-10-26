@@ -53,6 +53,14 @@
                     app:srcCompat="@drawable/btwb_logo"
                     tools:visibility="visible" />
 
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="433dp"
+                    android:layout_centerInParent="true"
+                    android:adjustViewBounds="true"
+                    android:background="#80000000" />
+
                 <com.btwb.photoeditorsdk.BrushDrawingView
                     android:id="@+id/drawing_view"
                     android:layout_width="match_parent"
@@ -61,6 +69,15 @@
                     android:layout_alignBottom="@+id/photo_edit_iv"
                     android:layout_centerInParent="true"
                     android:visibility="visible" />
+
+                <View
+                    android:id="@+id/leftVerticalLine"
+                    android:layout_width="2dp"
+                    android:layout_height="433dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:background="#80FFFFFF"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
