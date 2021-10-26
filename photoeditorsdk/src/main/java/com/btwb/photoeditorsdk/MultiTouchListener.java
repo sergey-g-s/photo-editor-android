@@ -144,11 +144,11 @@ class MultiTouchListener implements OnTouchListener {
                     if (!mScaleGestureDetector.isInProgress()) {
                         adjustTranslation(view, currX - mPrevX, currY - mPrevY);
                     }
-                    if(view.getX() > 10 && view.getX() < 50){
-                        this.LeftLineView.setVisibility(View.VISIBLE);
-                    }else {
-                        this.LeftLineView.setVisibility(View.GONE);
-                    }
+//                    if(view.getX() > 10 && view.getX() < 50){
+//                        this.LeftLineView.setVisibility(View.VISIBLE);
+//                    }else {
+//                        this.LeftLineView.setVisibility(View.GONE);
+//                    }
                     Log.d("currX", String.valueOf(view.getX()));
                     Log.d("currY", String.valueOf(view.getY()));
                 }
