@@ -18,13 +18,14 @@ class MultiTouchListener implements OnTouchListener {
     private boolean isScaleEnabled = true;
     private float maximumScale = 10.0f;
     private int mActivePointerId = INVALID_POINTER_ID;
-    private float mPrevX, mPrevY, mPrevRawX, mPrevRawY, mDefaultY, mDefaultX;
+    private float mPrevX, mPrevY, mPrevRawX, mPrevRawY, mLeftX, LockY;
     private ScaleGestureDetector mScaleGestureDetector;
 
     private int[] location = new int[2];
     private int width;
     private Rect outRect;
     private boolean editable;
+    private boolean moveX = true;
     private View deleteView, LeftLineView;
     private String type;
     private ImageView photoEditImageView;
@@ -70,7 +71,7 @@ class MultiTouchListener implements OnTouchListener {
 
     private static void move(View view, TransformInfo info) {
         computeRenderOffset(view, info.pivotX, info.pivotY);
-        adjustTranslation(view, info.deltaX, info.deltaY);
+        adjustTranslation(view, info.deltaX, info.deltaY, true, true);
 
         float scale = view.getScaleX() * info.deltaScale;
         scale = Math.max(info.minimumScale, Math.min(info.maximumScale, scale));
@@ -81,10 +82,14 @@ class MultiTouchListener implements OnTouchListener {
         view.setRotation(rotation);
     }
 
-    private static void adjustTranslation(View view, float deltaX, float deltaY) {
+    private static void adjustTranslation(View view, float deltaX, float deltaY, boolean moveX, boolean moveY) {
         float[] deltaVector = {deltaX, deltaY};
         view.getMatrix().mapVectors(deltaVector);
-        view.setTranslationX(view.getTranslationX() + deltaVector[0]);
+        if(moveX){
+            view.setTranslationX(view.getTranslationX() + deltaVector[0]);
+        }else {
+            view.setTranslationX(view.getTranslationX());
+        }
         view.setTranslationY(view.getTranslationY() + deltaVector[1]);
     }
 
@@ -124,15 +129,14 @@ class MultiTouchListener implements OnTouchListener {
 
         switch (action & event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                mDefaultY = view.getY();
-                mDefaultX = view.getX();
+//                mLeftX = this.LeftLineView.getX();
                 mPrevX = event.getX();
                 mPrevY = event.getY();
                 mPrevRawX = event.getRawX();
                 mPrevRawY = event.getRawY();
                 mActivePointerId = event.getPointerId(0);
-//                deleteView.setVisibility(View.VISIBLE);
-//                activeView.setVisibility(View.GONE);
+                deleteView.setVisibility(View.VISIBLE);
+                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -141,16 +145,34 @@ class MultiTouchListener implements OnTouchListener {
                 if (pointerIndexMove != -1) {
                     float currX = event.getX(pointerIndexMove);
                     float currY = event.getY(pointerIndexMove);
-                    if (!mScaleGestureDetector.isInProgress()) {
-                        adjustTranslation(view, currX - mPrevX, currY - mPrevY);
-                    }
-//                    if(view.getX() > 10 && view.getX() < 50){
-//                        this.LeftLineView.setVisibility(View.VISIBLE);
-//                    }else {
-//                        this.LeftLineView.setVisibility(View.GONE);
+
+//                    Log.d("mPrevX", String.valueOf(mPrevX));
+//                    Log.d("mPrevRawX", String.valueOf(mPrevRawX));
+//                    Log.d("mPrevRawY", String.valueOf(mPrevRawY));
+//                    Log.d("currX", String.valueOf(currX));
+//                    Log.d("currY", String.valueOf(currY));
+//                    Log.d("view.getX()", String.valueOf((int) view.getX()));
+//                    Log.d("mLeftX", String.valueOf((int) mLeftX));
+//
+//
+//                    if((int) view.getX() == (int) (mLeftX + 4) && moveX){
+//                        this.LeftLineView.setAlpha(1);
+//                        moveX = false;
+//                    }else if (this.LeftLineView.getAlpha() == 1.0 && moveX){
+//                        this.LeftLineView.setAlpha(0);
 //                    }
-                    Log.d("currX", String.valueOf(view.getX()));
-                    Log.d("currY", String.valueOf(view.getY()));
+//
+//
+//                    if(mPrevX - currX > 30 || mPrevX - currX < -30){
+//                        moveX = true;
+//                    }
+
+                    if (!mScaleGestureDetector.isInProgress()) {
+                        adjustTranslation(view, currX - mPrevX, currY - mPrevY, moveX, true);
+                    }
+
+
+
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -158,14 +180,14 @@ class MultiTouchListener implements OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                 mActivePointerId = INVALID_POINTER_ID;
-//                if (isViewInBounds(deleteView, x, y)) {
-//                    if (onMultiTouchListener != null)
-//                        onMultiTouchListener.onRemoveViewListener(view);
-//                } else if (!isViewInBounds(photoEditImageView, x, y)) {
-//                view.animate().translationY(0).translationY(0);
-//                }
-//                deleteView.setVisibility(View.GONE);
-//                activeView.setVisibility(View.VISIBLE);
+                if (isViewInBounds(deleteView, x, y)) {
+                    if (onMultiTouchListener != null)
+                        onMultiTouchListener.onRemoveViewListener(view);
+                } else if (!isViewInBounds(photoEditImageView, x, y)) {
+                view.animate().translationY(0).translationY(0);
+                }
+                deleteView.setVisibility(View.GONE);
+                activeView.setVisibility(View.VISIBLE);
                 firePhotoEditorSDKListener(view, false);
                 float mCurrentCancelX = event.getRawX();
                 float mCurrentCancelY = event.getRawY();

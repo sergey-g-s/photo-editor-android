@@ -75,9 +75,21 @@
                     android:layout_width="2dp"
                     android:layout_height="433dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="20dp"
+                    android:alpha="0"
                     android:background="#80FFFFFF"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
+
+                <View
+                    android:id="@+id/rightVerticalLine"
+                    android:layout_width="2dp"
+                    android:layout_height="433dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:alpha="0"
+                    android:background="#80FFFFFF"
+                    android:visibility="visible" />
 
             </RelativeLayout>
 

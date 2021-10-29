@@ -55,7 +55,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private Typeface emojiFont;
     private View topShadow;
     private RelativeLayout topShadowRelativeLayout;
-    private View bottomShadow, leftVerticalLine;
+    private View bottomShadow, leftVerticalLine, rightVerticalLine;
     private RelativeLayout bottomShadowRelativeLayout;
     private ArrayList<Integer> colorPickerColors;
     private int colorCodeTextView = -1;
@@ -98,6 +98,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         topShadowRelativeLayout = (RelativeLayout) findViewById(R.id.top_parent_rl);
         bottomShadow = findViewById(R.id.bottom_shadow);
         leftVerticalLine = findViewById(R.id.leftVerticalLine);
+        rightVerticalLine = findViewById(R.id.rightVerticalLine);
         bottomShadowRelativeLayout = (RelativeLayout) findViewById(R.id.bottom_parent_rl);
 
         ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
@@ -125,7 +126,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         photoEditorSDK = new PhotoEditorSDK.PhotoEditorSDKBuilder(PhotoEditorActivity.this)
                 .parentView(parentImageRelativeLayout) // add parent image view
-//                .line(leftVerticalLine)
+//                .line(leftVerticalLine, rightVerticalLine)
                 .childView(photoEditImageView) // add the desired image view
                 .activeView(null) // add the desired image view
                 .deleteView(deleteRelativeLayout) // add the deleted view that will appear during the movement of the views
@@ -204,7 +205,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
 
 //                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "date",icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#000000", "#33ffffff",  convertDpToPixel(100), 2,8,true, true, null);
-                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#000000", "#33ffffff",  convertDpToPixel(0), 2,8,true, true,"  TEST TEST");
+                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#250000", "#ffffff",  convertDpToPixel(0), 2,8,true, true,"  TEST TEST");
             }
         }.start();
     }

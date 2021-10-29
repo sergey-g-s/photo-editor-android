@@ -48,7 +48,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         this.context = photoEditorSDKBuilder.context;
         this.parentView = photoEditorSDKBuilder.parentView;
         this.activeView = photoEditorSDKBuilder.activeView;
-//        this.leftLineView = photoEditorSDKBuilder.leftLineView;
+        this.leftLineView = photoEditorSDKBuilder.leftLineView;
         this.imageView = photoEditorSDKBuilder.imageView;
         this.deleteView = photoEditorSDKBuilder.deleteView;
         this.brushDrawingView = photoEditorSDKBuilder.brushDrawingView;
@@ -414,7 +414,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         private RelativeLayout parentView;
         private LinearLayout activeView;
         private ImageView imageView;
-        private View deleteView, leftLineView;
+        private View deleteView, leftLineView, rightLineView;
         private BrushDrawingView brushDrawingView;
 
         public PhotoEditorSDKBuilder(Context context) {
@@ -426,10 +426,11 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             return this;
         }
 
-//        public PhotoEditorSDKBuilder line(View left) {
-//            this.leftLineView = left;
-//            return this;
-//        }
+        public PhotoEditorSDKBuilder line(View left, View right) {
+            this.leftLineView = left;
+            this.rightLineView = right;
+            return this;
+        }
 
         public PhotoEditorSDKBuilder activeView(LinearLayout activeView) {
             this.activeView = activeView;
