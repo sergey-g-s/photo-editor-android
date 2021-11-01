@@ -1,10 +1,13 @@
 package com.btwb.photoeditorsdk;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,7 +21,7 @@ class MultiTouchListener implements OnTouchListener {
     private boolean isScaleEnabled = true;
     private float maximumScale = 10.0f;
     private int mActivePointerId = INVALID_POINTER_ID;
-    private float mPrevX, mPrevY, mPrevRawX, mPrevRawY, mLeftX, LockY;
+    private float mPrevX, mPrevY, mPrevRawX, mPrevRawY, mLeftX, mRightX, mBottomX, mTopX, mVertical, mHorizontal;
     private ScaleGestureDetector mScaleGestureDetector;
 
     private int[] location = new int[2];
@@ -26,7 +29,8 @@ class MultiTouchListener implements OnTouchListener {
     private Rect outRect;
     private boolean editable;
     private boolean moveX = true;
-    private View deleteView, LeftLineView;
+    private boolean moveY = true;
+    private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine;
     private String type;
     private ImageView photoEditImageView;
     private RelativeLayout parentView;
@@ -43,11 +47,21 @@ class MultiTouchListener implements OnTouchListener {
                        int width,
                        boolean editable,
                        String type,
-                       View LeftLineView
+                       View leftLineView,
+                       View rightLineView,
+                       View bottomHorizontalLine,
+                       View topHorizontalLine,
+                       View verticalLine,
+                       View horizontalLine
     ) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
-        this.LeftLineView = LeftLineView;
+        this.leftLineView = leftLineView;
+        this.rightLineView = rightLineView;
+        this.bottomHorizontalLine = bottomHorizontalLine;
+        this.topHorizontalLine = topHorizontalLine;
+        this.verticalLine = verticalLine;
+        this.horizontalLine = horizontalLine;
         this.parentView = parentView;
         this.activeView = activeView;
         this.editable = editable;
@@ -90,7 +104,12 @@ class MultiTouchListener implements OnTouchListener {
         }else {
             view.setTranslationX(view.getTranslationX());
         }
-        view.setTranslationY(view.getTranslationY() + deltaVector[1]);
+
+        if(moveY){
+            view.setTranslationY(view.getTranslationY() + deltaVector[1]);
+        }else {
+            view.setTranslationY(view.getTranslationY());
+        }
     }
 
     private static void computeRenderOffset(View view, float pivotX, float pivotY) {
@@ -114,6 +133,13 @@ class MultiTouchListener implements OnTouchListener {
         view.setTranslationY(view.getTranslationY() - offsetY);
     }
 
+    private void LineAnimation(View view, float start, float end){
+        AlphaAnimation animation = new AlphaAnimation(start, end);
+        animation.setDuration(500);
+        view.setAlpha(end);
+        view.startAnimation(animation);
+    }
+
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         mScaleGestureDetector.onTouchEvent(view, event);
@@ -129,7 +155,12 @@ class MultiTouchListener implements OnTouchListener {
 
         switch (action & event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-//                mLeftX = this.LeftLineView.getX();
+                mLeftX = this.leftLineView.getX();
+                mRightX = this.rightLineView.getX();
+                mBottomX = this.bottomHorizontalLine.getY();
+                mTopX = this.topHorizontalLine.getY();
+                mVertical = this.verticalLine.getX();
+                mHorizontal = this.horizontalLine.getY();
                 mPrevX = event.getX();
                 mPrevY = event.getY();
                 mPrevRawX = event.getRawX();
@@ -146,29 +177,58 @@ class MultiTouchListener implements OnTouchListener {
                     float currX = event.getX(pointerIndexMove);
                     float currY = event.getY(pointerIndexMove);
 
-//                    Log.d("mPrevX", String.valueOf(mPrevX));
-//                    Log.d("mPrevRawX", String.valueOf(mPrevRawX));
-//                    Log.d("mPrevRawY", String.valueOf(mPrevRawY));
-//                    Log.d("currX", String.valueOf(currX));
-//                    Log.d("currY", String.valueOf(currY));
-//                    Log.d("view.getX()", String.valueOf((int) view.getX()));
-//                    Log.d("mLeftX", String.valueOf((int) mLeftX));
-//
-//
-//                    if((int) view.getX() == (int) (mLeftX + 4) && moveX){
-//                        this.LeftLineView.setAlpha(1);
-//                        moveX = false;
-//                    }else if (this.LeftLineView.getAlpha() == 1.0 && moveX){
-//                        this.LeftLineView.setAlpha(0);
-//                    }
-//
-//
-//                    if(mPrevX - currX > 30 || mPrevX - currX < -30){
-//                        moveX = true;
-//                    }
+                    if((int) view.getX() == (int) (mLeftX + 4) && moveX){
+                        this.LineAnimation(this.leftLineView, 0f, 100f);
+                        moveX = false;
+                    }else if (this.leftLineView.getAlpha() == 100.0 && moveX){
+                        this.LineAnimation(this.leftLineView, 100f, 0f);
+                    }
+
+                    if((int) (view.getX() + view.getWidth()) == (int) (mRightX - 2) && moveX){
+                        this.LineAnimation(this.rightLineView, 0f, 100f);
+                        moveX = false;
+                    }else if (this.rightLineView.getAlpha() == 100.0 && moveX){
+                        this.LineAnimation(this.rightLineView, 100f, 0f);
+                    }
+
+                    if((int) (view.getY() + view.getHeight()) == (int) (mBottomX - 2) && moveY){
+                        this.LineAnimation(this.bottomHorizontalLine, 0f, 100f);
+                        moveY = false;
+                    }else if (this.bottomHorizontalLine.getAlpha() == 100.0 && moveY){
+                        this.LineAnimation(this.bottomHorizontalLine, 100f, 0f);
+                    }
+
+                    if((int) view.getY() == (int) (mTopX + 4) && moveY){
+                        this.LineAnimation(this.topHorizontalLine, 0f, 100f);
+                        moveY = false;
+                    }else if (this.topHorizontalLine.getAlpha() == 100.0 && moveY){
+                        this.LineAnimation(this.topHorizontalLine, 100f, 0f);
+                    }
+
+                    if((int) (view.getX() + view.getWidth() / 2) == (int) mVertical && moveX){
+                        this.LineAnimation(this.verticalLine, 0f, 100f);
+                        moveX = false;
+                    }else if (this.verticalLine.getAlpha() == 100.0 && moveX){
+                        this.LineAnimation(this.verticalLine, 100f, 0f);
+                    }
+
+                    if((int) (view.getY() + view.getHeight() / 2) == (int) mHorizontal && moveY){
+                        this.LineAnimation(this.horizontalLine, 0f, 100f);
+                        moveY = false;
+                    }else if (this.horizontalLine.getAlpha() == 100.0 && moveY){
+                        this.LineAnimation(this.horizontalLine, 100f, 0f);
+                    }
+
+                    if(mPrevX - currX > 30 || mPrevX - currX < -30){
+                        moveX = true;
+                    }
+
+                    if(mPrevY - currY > 30 || mPrevY - currY < -30){
+                        moveY = true;
+                    }
 
                     if (!mScaleGestureDetector.isInProgress()) {
-                        adjustTranslation(view, currX - mPrevX, currY - mPrevY, moveX, true);
+                        adjustTranslation(view, currX - mPrevX, currY - mPrevY, moveX, moveY);
                     }
 
 
@@ -188,6 +248,14 @@ class MultiTouchListener implements OnTouchListener {
                 }
                 deleteView.setVisibility(View.GONE);
                 activeView.setVisibility(View.VISIBLE);
+                moveY = true;
+                moveX = true;
+                this.LineAnimation(this.horizontalLine, 100f, 0f);
+                this.LineAnimation(this.verticalLine, 100f, 0f);
+                this.LineAnimation(this.topHorizontalLine, 100f, 0f);
+                this.LineAnimation(this.bottomHorizontalLine, 100f, 0f);
+                this.LineAnimation(this.rightLineView, 100f, 0f);
+                this.LineAnimation(this.leftLineView, 100f, 0f);
                 firePhotoEditorSDKListener(view, false);
                 float mCurrentCancelX = event.getRawX();
                 float mCurrentCancelY = event.getRawY();

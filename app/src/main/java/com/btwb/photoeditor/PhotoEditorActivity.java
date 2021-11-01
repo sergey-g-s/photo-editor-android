@@ -55,7 +55,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private Typeface emojiFont;
     private View topShadow;
     private RelativeLayout topShadowRelativeLayout;
-    private View bottomShadow, leftVerticalLine, rightVerticalLine;
+    private View bottomShadow;
     private RelativeLayout bottomShadowRelativeLayout;
     private ArrayList<Integer> colorPickerColors;
     private int colorCodeTextView = -1;
@@ -97,8 +97,12 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         topShadow = findViewById(R.id.top_shadow);
         topShadowRelativeLayout = (RelativeLayout) findViewById(R.id.top_parent_rl);
         bottomShadow = findViewById(R.id.bottom_shadow);
-        leftVerticalLine = findViewById(R.id.leftVerticalLine);
-        rightVerticalLine = findViewById(R.id.rightVerticalLine);
+        View leftVerticalLine = findViewById(R.id.leftVerticalLine);
+        View rightVerticalLine = findViewById(R.id.rightVerticalLine);
+        View bottomHorizontalLine = findViewById(R.id.bottomHorizontalLine);
+        View topHorizontalLine = findViewById(R.id.topHorizontalLine);
+        View horizontalLine = findViewById(R.id.horizontalLine);
+        View verticalLine = findViewById(R.id.verticalLine);
         bottomShadowRelativeLayout = (RelativeLayout) findViewById(R.id.bottom_parent_rl);
 
         ViewPager pager = (ViewPager) findViewById(R.id.image_emoji_view_pager);
@@ -126,7 +130,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         photoEditorSDK = new PhotoEditorSDK.PhotoEditorSDKBuilder(PhotoEditorActivity.this)
                 .parentView(parentImageRelativeLayout) // add parent image view
-//                .line(leftVerticalLine, rightVerticalLine)
+                .line(leftVerticalLine, rightVerticalLine, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine)
                 .childView(photoEditImageView) // add the desired image view
                 .activeView(null) // add the desired image view
                 .deleteView(deleteRelativeLayout) // add the deleted view that will appear during the movement of the views

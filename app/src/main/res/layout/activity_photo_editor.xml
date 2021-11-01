@@ -91,6 +91,46 @@
                     android:background="#80FFFFFF"
                     android:visibility="visible" />
 
+                <View
+                    android:id="@+id/bottomHorizontalLine"
+                    android:layout_alignBottom="@+id/photo_edit_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="20dp"
+                    android:alpha="0"
+                    android:background="#80FFFFFF"
+                    />
+
+                <View
+                    android:id="@+id/topHorizontalLine"
+                    android:layout_alignTop="@+id/photo_edit_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="20dp"
+                    android:alpha="0"
+                    android:background="#80FFFFFF"
+                    />
+
+                <View
+                    android:id="@+id/horizontalLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_centerVertical="true"
+                    android:alpha="0"
+                    android:background="#80FFFFFF" />
+
+                <View
+                    android:id="@+id/verticalLine"
+                    android:layout_width="2dp"
+                    android:layout_height="433dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0"
+                    android:background="#80FFFFFF" />
+
+
+
             </RelativeLayout>
 
             <TextView
