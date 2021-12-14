@@ -191,7 +191,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         if(rightText != null){
             Spannable word = new SpannableString(text);
 
-            word.setSpan(new ForegroundColorSpan(Color.BLACK), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            word.setSpan(new ForegroundColorSpan(Color.WHITE), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             addTextView.setText(word);
             Spannable wordTwo = new SpannableString("  " + rightText);
