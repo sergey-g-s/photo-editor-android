@@ -46,7 +46,7 @@
                     android:layout_alignBottom="@+id/photo_edit_iv"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="14dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="14dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerInside"
                     android:visibility="visible"

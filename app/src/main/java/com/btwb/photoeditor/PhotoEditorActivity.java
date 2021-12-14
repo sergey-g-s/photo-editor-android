@@ -209,7 +209,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
 
 //                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "date",icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#000000", "#33ffffff",  convertDpToPixel(100), 2,8,true, true, null);
-                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#250000", "#ffffff",  convertDpToPixel(0), 2,8,true, true,"  TEST TEST");
+                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#250000", "#ffffff",  convertDpToPixel(0), 2,8,true, true,"TEST TEST");
             }
         }.start();
     }
