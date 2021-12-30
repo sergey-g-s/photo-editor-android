@@ -2,6 +2,7 @@ package com.btwb.photoeditorsdk;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,6 +17,10 @@ import android.widget.TextView;
 class MultiTouchListener implements OnTouchListener {
 
     private static final int INVALID_POINTER_ID = -1;
+    private static float renderedWidth;
+    private static float renderedHeight;
+    private static float renderedX;
+    private static float renderedY;
     private boolean isRotateEnabled = true;
     private boolean isTranslateEnabled = true;
     private boolean isScaleEnabled = true;
@@ -84,13 +89,17 @@ class MultiTouchListener implements OnTouchListener {
     }
 
     private static void move(View view, TransformInfo info) {
-        computeRenderOffset(view, info.pivotX, info.pivotY);
+        computeRenderOffset(view, 0, 0);
         adjustTranslation(view, info.deltaX, info.deltaY, true, true);
 
         float scale = view.getScaleX() * info.deltaScale;
         scale = Math.max(info.minimumScale, Math.min(info.maximumScale, scale));
+        renderedWidth = view.getWidth() * scale;
+        renderedHeight = view.getHeight() * scale;
         view.setScaleX(scale);
         view.setScaleY(scale);
+
+
 
         float rotation = adjustAngle(view.getRotation() + info.deltaAngle);
         view.setRotation(rotation);
@@ -176,43 +185,48 @@ class MultiTouchListener implements OnTouchListener {
                 if (pointerIndexMove != -1) {
                     float currX = event.getX(pointerIndexMove);
                     float currY = event.getY(pointerIndexMove);
+                    float scaleWidth = renderedWidth == 0.0 ? view.getWidth() : renderedWidth;
+                    float scaledHeight = renderedHeight == 0.0 ? view.getHeight() : renderedHeight;
+                    float scaledX = view.getX();
+                    float scaledY = view.getY();
 
-                    if((int) view.getX() == (int) (mLeftX + 4) && moveX){
+
+                    if((int) scaledX == (int) (mLeftX + 4) && moveX){
                         this.LineAnimation(this.leftLineView, 0f, 100f);
                         moveX = false;
                     }else if (this.leftLineView.getAlpha() == 100.0 && moveX){
                         this.LineAnimation(this.leftLineView, 100f, 0f);
                     }
 
-                    if((int) (view.getX() + view.getWidth()) == (int) (mRightX - 2) && moveX){
+                    if((int) (scaledX + scaleWidth) == (int) (mRightX - 2) && moveX){
                         this.LineAnimation(this.rightLineView, 0f, 100f);
                         moveX = false;
                     }else if (this.rightLineView.getAlpha() == 100.0 && moveX){
                         this.LineAnimation(this.rightLineView, 100f, 0f);
                     }
 
-                    if((int) (view.getY() + view.getHeight()) == (int) (mBottomX - 2) && moveY){
+                    if((int) (scaledY + scaledHeight) == (int) (mBottomX - 2) && moveY){
                         this.LineAnimation(this.bottomHorizontalLine, 0f, 100f);
                         moveY = false;
                     }else if (this.bottomHorizontalLine.getAlpha() == 100.0 && moveY){
                         this.LineAnimation(this.bottomHorizontalLine, 100f, 0f);
                     }
 
-                    if((int) view.getY() == (int) (mTopX + 4) && moveY){
+                    if((int) scaledY == (int) (mTopX + 4) && moveY){
                         this.LineAnimation(this.topHorizontalLine, 0f, 100f);
                         moveY = false;
                     }else if (this.topHorizontalLine.getAlpha() == 100.0 && moveY){
                         this.LineAnimation(this.topHorizontalLine, 100f, 0f);
                     }
 
-                    if((int) (view.getX() + view.getWidth() / 2) == (int) mVertical && moveX){
+                    if((int) (scaledX + scaleWidth / 2) == (int) mVertical && moveX){
                         this.LineAnimation(this.verticalLine, 0f, 100f);
                         moveX = false;
                     }else if (this.verticalLine.getAlpha() == 100.0 && moveX){
                         this.LineAnimation(this.verticalLine, 100f, 0f);
                     }
 
-                    if((int) (view.getY() + view.getHeight() / 2) == (int) mHorizontal && moveY){
+                    if((int) (scaledY + scaledHeight / 2) == (int) mHorizontal && moveY){
                         this.LineAnimation(this.horizontalLine, 0f, 100f);
                         moveY = false;
                     }else if (this.horizontalLine.getAlpha() == 100.0 && moveY){
