@@ -122,6 +122,14 @@
                     android:background="#80FFFFFF" />
 
                 <View
+                    android:id="@+id/stickerHorizontalLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_centerVertical="true"
+                    android:alpha="0"
+                    android:background="@color/red_color_picker" />
+
+                <View
                     android:id="@+id/verticalLine"
                     android:layout_width="2dp"
                     android:layout_height="433dp"

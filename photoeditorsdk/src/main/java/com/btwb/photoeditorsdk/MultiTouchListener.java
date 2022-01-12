@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,8 +20,6 @@ class MultiTouchListener implements OnTouchListener {
     private static final int INVALID_POINTER_ID = -1;
     private static float renderedWidth;
     private static float renderedHeight;
-    private static float renderedX;
-    private static float renderedY;
     private boolean isRotateEnabled = true;
     private boolean isTranslateEnabled = true;
     private boolean isScaleEnabled = true;
@@ -35,7 +34,7 @@ class MultiTouchListener implements OnTouchListener {
     private boolean editable;
     private boolean moveX = true;
     private boolean moveY = true;
-    private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine;
+    private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine;
     private String type;
     private ImageView photoEditImageView;
     private RelativeLayout parentView;
@@ -57,13 +56,15 @@ class MultiTouchListener implements OnTouchListener {
                        View bottomHorizontalLine,
                        View topHorizontalLine,
                        View verticalLine,
-                       View horizontalLine
+                       View horizontalLine,
+                       View stickerHorizontalLine
     ) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
         this.leftLineView = leftLineView;
         this.rightLineView = rightLineView;
         this.bottomHorizontalLine = bottomHorizontalLine;
+        this.stickerHorizontalLine = stickerHorizontalLine;
         this.topHorizontalLine = topHorizontalLine;
         this.verticalLine = verticalLine;
         this.horizontalLine = horizontalLine;
@@ -88,7 +89,7 @@ class MultiTouchListener implements OnTouchListener {
         return degrees;
     }
 
-    private static void move(View view, TransformInfo info) {
+    private void move(View view, TransformInfo info) {
         computeRenderOffset(view, 0, 0);
         adjustTranslation(view, info.deltaX, info.deltaY, true, true);
 
@@ -100,9 +101,15 @@ class MultiTouchListener implements OnTouchListener {
         view.setScaleY(scale);
 
 
-
         float rotation = adjustAngle(view.getRotation() + info.deltaAngle);
-        view.setRotation(rotation);
+        if(rotation <= 3 && rotation >= -3){
+            view.setRotation(0);
+            this.LineAnimation(this.stickerHorizontalLine, 0f, 100f);
+            this.stickerHorizontalLine.setY(view.getY() + (renderedHeight / 2));
+        } else {
+            view.setRotation(rotation);
+            this.LineAnimation(this.stickerHorizontalLine, 100f, 0f);
+        }
     }
 
     private static void adjustTranslation(View view, float deltaX, float deltaY, boolean moveX, boolean moveY) {
@@ -175,8 +182,8 @@ class MultiTouchListener implements OnTouchListener {
                 mPrevRawX = event.getRawX();
                 mPrevRawY = event.getRawY();
                 mActivePointerId = event.getPointerId(0);
-                deleteView.setVisibility(View.VISIBLE);
-                activeView.setVisibility(View.GONE);
+//                deleteView.setVisibility(View.VISIBLE);
+//                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -260,11 +267,12 @@ class MultiTouchListener implements OnTouchListener {
                 } else if (!isViewInBounds(photoEditImageView, x, y)) {
                 view.animate().translationY(0).translationY(0);
                 }
-                deleteView.setVisibility(View.GONE);
-                activeView.setVisibility(View.VISIBLE);
+//                deleteView.setVisibility(View.GONE);
+//                activeView.setVisibility(View.VISIBLE);
                 moveY = true;
                 moveX = true;
                 this.LineAnimation(this.horizontalLine, 100f, 0f);
+                this.LineAnimation(this.stickerHorizontalLine, 100f, 0f);
                 this.LineAnimation(this.verticalLine, 100f, 0f);
                 this.LineAnimation(this.topHorizontalLine, 100f, 0f);
                 this.LineAnimation(this.bottomHorizontalLine, 100f, 0f);

@@ -97,6 +97,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         topShadow = findViewById(R.id.top_shadow);
         topShadowRelativeLayout = (RelativeLayout) findViewById(R.id.top_parent_rl);
         bottomShadow = findViewById(R.id.bottom_shadow);
+        View stickerHorizontalLine = findViewById(R.id.stickerHorizontalLine);
         View leftVerticalLine = findViewById(R.id.leftVerticalLine);
         View rightVerticalLine = findViewById(R.id.rightVerticalLine);
         View bottomHorizontalLine = findViewById(R.id.bottomHorizontalLine);
@@ -130,7 +131,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         photoEditorSDK = new PhotoEditorSDK.PhotoEditorSDKBuilder(PhotoEditorActivity.this)
                 .parentView(parentImageRelativeLayout) // add parent image view
-                .line(leftVerticalLine, rightVerticalLine, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine)
+                .line(leftVerticalLine, rightVerticalLine, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine)
                 .childView(photoEditImageView) // add the desired image view
                 .activeView(null) // add the desired image view
                 .deleteView(deleteRelativeLayout) // add the deleted view that will appear during the movement of the views

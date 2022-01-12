@@ -1,6 +1,7 @@
 package com.btwb.photoeditorsdk;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 public class Vector2D extends PointF {
 
