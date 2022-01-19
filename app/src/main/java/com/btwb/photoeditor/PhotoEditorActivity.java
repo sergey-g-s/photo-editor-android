@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -48,7 +49,7 @@ import java.util.List;
 public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener, OnPhotoEditorSDKListener {
 
     private final String TAG = "PhotoEditorActivity";
-    private RelativeLayout parentImageRelativeLayout;
+    private ConstraintLayout parentImageRelativeLayout;
     private RecyclerView drawingViewColorPickerRecyclerView;
     private TextView undoTextView, undoTextTextView, doneDrawingTextView, eraseDrawingTextView, EmptyView;
     private SlidingUpPanelLayout mLayout;
@@ -78,7 +79,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         BrushDrawingView brushDrawingView = (BrushDrawingView) findViewById(R.id.drawing_view);
         drawingViewColorPickerRecyclerView = (RecyclerView) findViewById(R.id.drawing_view_color_picker_recycler_view);
-        parentImageRelativeLayout = (RelativeLayout) findViewById(R.id.parent_image_rl);
+        parentImageRelativeLayout = (ConstraintLayout) findViewById(R.id.parent_image_rl);
         TextView closeTextView = (TextView) findViewById(R.id.close_tv);
         TextView addTextView = (TextView) findViewById(R.id.add_text_tv);
         TextView addPencil = (TextView) findViewById(R.id.add_pencil_tv);
@@ -210,7 +211,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
 
 //                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "date",icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#000000", "#33ffffff",  convertDpToPixel(100), 2,8,true, true, null);
-                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10, convertDpToPixel(80), top + convertDpToPixel(80), "#250000", "#ffffff",  convertDpToPixel(0), 2,8,true, true,"TEST TEST");
+                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10,0, top, "#250000", "#ffffff",  convertDpToPixel(0), 2,8,true, false,"TEST TEST");
             }
         }.start();
     }

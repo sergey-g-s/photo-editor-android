@@ -8,6 +8,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.annotation.ColorInt;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -35,7 +37,7 @@ import java.util.List;
 public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
     private Context context;
-    private RelativeLayout parentView;
+    private ConstraintLayout parentView;
     private LinearLayout activeView;
     private ImageView imageView;
     private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine;
@@ -167,7 +169,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                             int iconHorizontal,
                             int fontSize,
                             final int x,
-                            int y,
+                            final int y,
                             String textColor,
                             String backgroundColor,
                             int width,
@@ -182,9 +184,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         final TextView addTextView = (TextView) addTextRootView.findViewById(R.id.photo_editor_sdk_text_tv);
         addTextView.setText(text);
         addTextView.setTypeface(font);
-        System.out.println("fontSize:" + fontSize);
         addTextView.setTextSize(fontSize);
-        if(!center) addTextView.setY(y);
         addTextView.setPadding(paddingHorizontal,paddingVertical,paddingHorizontal,paddingVertical);
         addTextView.setTextColor(Color.parseColor(textColor));
         addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
@@ -219,17 +219,20 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                     addTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     int viewWidth = addTextView.getWidth();
                     addTextView.setX(x <= viewWidth ? x : x - viewWidth);
+                    addTextView.setY(y);
                 }
             });
         }
 
 
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        if(center){
-            params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        }
+        params.bottomToBottom = ConstraintSet.PARENT_ID;
+        params.endToEnd = ConstraintSet.PARENT_ID;
+        params.startToStart = ConstraintSet.PARENT_ID;
+        params.topToTop = ConstraintSet.PARENT_ID;
+        addTextView.setLayoutParams(params);
         parentView.addView(addTextView, params);
         addedViews.add(addTextView);
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
@@ -417,7 +420,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
     public static class PhotoEditorSDKBuilder {
 
         private Context context;
-        private RelativeLayout parentView;
+        private ConstraintLayout parentView;
         private LinearLayout activeView;
         private ImageView imageView;
         private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine;
@@ -427,7 +430,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             this.context = context;
         }
 
-        public PhotoEditorSDKBuilder parentView(RelativeLayout parentView) {
+        public PhotoEditorSDKBuilder parentView(ConstraintLayout parentView) {
             this.parentView = parentView;
             return this;
         }

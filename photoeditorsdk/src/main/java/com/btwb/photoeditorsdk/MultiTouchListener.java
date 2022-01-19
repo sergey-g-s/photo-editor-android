@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,14 +38,14 @@ class MultiTouchListener implements OnTouchListener {
     private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine;
     private String type;
     private ImageView photoEditImageView;
-    private RelativeLayout parentView;
+    private ConstraintLayout parentView;
     private LinearLayout  activeView;
 
     private OnMultiTouchListener onMultiTouchListener;
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
     MultiTouchListener(View deleteView,
-                       RelativeLayout parentView,
+                       ConstraintLayout parentView,
                        LinearLayout activeView,
                        ImageView photoEditImageView,
                        OnPhotoEditorSDKListener onPhotoEditorSDKListener,
@@ -182,8 +183,8 @@ class MultiTouchListener implements OnTouchListener {
                 mPrevRawX = event.getRawX();
                 mPrevRawY = event.getRawY();
                 mActivePointerId = event.getPointerId(0);
-                deleteView.setVisibility(View.VISIBLE);
-                activeView.setVisibility(View.GONE);
+//                deleteView.setVisibility(View.VISIBLE);
+//                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -196,6 +197,8 @@ class MultiTouchListener implements OnTouchListener {
                     float scaledHeight = renderedHeight == 0.0 ? view.getHeight() : renderedHeight;
                     float scaledX = view.getX();
                     float scaledY = view.getY();
+
+                    Log.d("ACTION_MOVE", scaledX + " "+mLeftX + " "+moveX );
 
 
                     if((int) scaledX == (int) (mLeftX + 4) && moveX){
@@ -267,8 +270,8 @@ class MultiTouchListener implements OnTouchListener {
                 } else if (!isViewInBounds(photoEditImageView, x, y)) {
                 view.animate().translationY(0).translationY(0);
                 }
-                deleteView.setVisibility(View.GONE);
-                activeView.setVisibility(View.VISIBLE);
+//                deleteView.setVisibility(View.GONE);
+//                activeView.setVisibility(View.VISIBLE);
                 moveY = true;
                 moveX = true;
                 this.LineAnimation(this.horizontalLine, 100f, 0f);
