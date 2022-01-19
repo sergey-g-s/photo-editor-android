@@ -74,9 +74,13 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                 parentView,activeView, this.imageView, onPhotoEditorSDKListener, 0,false, "", this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         imageRootView.setOnTouchListener(multiTouchListener);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        params.bottomToBottom = ConstraintSet.PARENT_ID;
+        params.endToEnd = ConstraintSet.PARENT_ID;
+        params.startToStart = ConstraintSet.PARENT_ID;
+        params.topToTop = ConstraintSet.PARENT_ID;
+        imageRootView.setLayoutParams(params);
         parentView.addView(imageRootView, params);
         addedViews.add(imageRootView);
         if (onPhotoEditorSDKListener != null)
@@ -255,9 +259,13 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                 parentView,activeView ,this.imageView, onPhotoEditorSDKListener, 0,false, "", this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         emojiRootView.setOnTouchListener(multiTouchListener);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        params.bottomToBottom = ConstraintSet.PARENT_ID;
+        params.endToEnd = ConstraintSet.PARENT_ID;
+        params.startToStart = ConstraintSet.PARENT_ID;
+        params.topToTop = ConstraintSet.PARENT_ID;
+        emojiRootView.setLayoutParams(params);
         parentView.addView(emojiRootView, params);
         addedViews.add(emojiRootView);
         if (onPhotoEditorSDKListener != null)
