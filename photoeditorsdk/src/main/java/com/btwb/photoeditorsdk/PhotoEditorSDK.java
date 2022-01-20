@@ -103,10 +103,16 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                 parentView,activeView, this.imageView, onPhotoEditorSDKListener, 0,false, "",this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         viewRootView.setOnTouchListener(multiTouchListener);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if(center){
-            params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            params = new ConstraintLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.bottomToBottom = ConstraintSet.PARENT_ID;
+            params.endToEnd = ConstraintSet.PARENT_ID;
+            params.startToStart = ConstraintSet.PARENT_ID;
+            params.topToTop = ConstraintSet.PARENT_ID;
+            viewRootView.setLayoutParams(params);
         }
         parentView.addView(viewRootView, params);
         addedViews.add(viewRootView);
@@ -157,9 +163,13 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                 parentView,activeView, this.imageView, onPhotoEditorSDKListener,width, true, type, this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         addTextRootView.setOnTouchListener(multiTouchListener);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        params.bottomToBottom = ConstraintSet.PARENT_ID;
+        params.endToEnd = ConstraintSet.PARENT_ID;
+        params.startToStart = ConstraintSet.PARENT_ID;
+        params.topToTop = ConstraintSet.PARENT_ID;
+        addTextRootView.setLayoutParams(params);
         parentView.addView(addTextRootView, params);
         addedViews.add(addTextRootView);
         if (onPhotoEditorSDKListener != null)
