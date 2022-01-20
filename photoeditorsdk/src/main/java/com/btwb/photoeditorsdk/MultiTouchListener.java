@@ -200,7 +200,7 @@ class MultiTouchListener implements OnTouchListener {
                     float scaledX = view.getX();
                     float scaledY = view.getY();
 
-//                    Log.d("mHorizontal", "" + mHorizontal);
+//                    Log.d("mLeftX", "" + mLeftX);
 //                    Log.d("mVertical", "" + mVertical);
 //                    Log.d("scaledX", "" + scaledX);
 //                    Log.d("scaledY", "" + scaledY);
@@ -214,7 +214,7 @@ class MultiTouchListener implements OnTouchListener {
 
                     if((scaledX > (mLeftX - 2) && scaledX < (mLeftX + 2)) && moveX){
                         this.LineAnimation(this.leftLineView, 0f, 100f);
-                        scaledX = 68;
+                        scaledX = mLeftX + 6;
                         moveX = false;
                     }else if (this.leftLineView.getAlpha() == 100.0 && moveX){
                         this.LineAnimation(this.leftLineView, 100f, 0f);
