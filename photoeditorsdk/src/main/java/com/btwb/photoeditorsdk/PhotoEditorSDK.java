@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Ahmed Adel on 02/06/2017.
@@ -66,6 +67,9 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
     public void addImage(Bitmap desiredImage) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View imageRootView = inflater.inflate(R.layout.photo_editor_sdk_image_item_list, null);
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        imageRootView.setBackgroundColor(color);
         ImageView imageView = (ImageView) imageRootView.findViewById(R.id.photo_editor_sdk_image_iv);
         imageView.setImageBitmap(desiredImage);
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -149,7 +153,6 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                 icon.setBounds( 0, 0, w, h );
                 addTextView.setCompoundDrawables(icon, null, null, null );
             }
-
         }
 
         addTextView.setText(text);
@@ -250,7 +253,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         parentView.addView(addTextView, params);
         addedViews.add(addTextView);
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                    parentView,activeView, this.imageView, onPhotoEditorSDKListener, width,editable, type, this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
+                    parentView, activeView, this.imageView, onPhotoEditorSDKListener, width,editable, type, this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
             multiTouchListener.setOnMultiTouchListener(this);
             addTextView.setOnTouchListener(multiTouchListener);
             if (onPhotoEditorSDKListener != null)
