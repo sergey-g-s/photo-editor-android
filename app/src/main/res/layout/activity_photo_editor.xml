@@ -41,7 +41,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1080:1237"
+                    app:layout_constraintDimensionRatio="1440:1575"
                     android:scaleType="centerCrop" />
 
                 <ImageView
@@ -67,7 +67,7 @@
                     android:adjustViewBounds="true"
                     android:background="#80000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1080:1237"
+                    app:layout_constraintDimensionRatio="1440:1575"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +80,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1080:1237"
+                    app:layout_constraintDimensionRatio="1440:1575"
                     android:visibility="gone" />
 
                 <View
@@ -93,7 +93,7 @@
                     android:background="@color/red_color_picker"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintDimensionRatio="6:1237"
+                    app:layout_constraintDimensionRatio="6:1575"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/view" />
 
@@ -109,7 +109,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintDimensionRatio="6:1237"
+                    app:layout_constraintDimensionRatio="6:1575"
                     android:visibility="visible" />
 
                 <View
@@ -124,7 +124,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintDimensionRatio="1080:4"
+                    app:layout_constraintDimensionRatio="1440:4"
                     />
 
                 <View
@@ -137,7 +137,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/view"
-                    app:layout_constraintDimensionRatio="1080:4"
+                    app:layout_constraintDimensionRatio="1440:4"
                     />
 
                 <View
@@ -150,7 +150,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1080:4"
+                    app:layout_constraintDimensionRatio="1440:4"
                     android:background="@color/red_color_picker" />
 
                 <View
@@ -163,7 +163,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1080:4"
+                    app:layout_constraintDimensionRatio="1440:4"
                     android:background="@color/red_color_picker" />
 
                 <View
@@ -176,7 +176,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintDimensionRatio="4:1237"
+                    app:layout_constraintDimensionRatio="4:1575"
                     android:background="@color/red_color_picker" />
 
 
