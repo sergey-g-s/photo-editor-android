@@ -101,8 +101,8 @@ class MultiTouchListener implements OnTouchListener {
 
     private void move(View view, TransformInfo info) {
 //        computeRenderOffset(view, 100, 100);
-
-        adjustTranslation(view, info.deltaX, info.deltaY, true, true, 0,0);
+        float rotation = adjustAngle(view.getRotation() + info.deltaAngle);
+        adjustTranslation(view, info.deltaX, info.deltaY, true, true, 0,0, rotation);
 
         float scale = view.getScaleX() * info.deltaScale;
         scale = Math.max(info.minimumScale, Math.min(info.maximumScale, scale));
@@ -111,7 +111,6 @@ class MultiTouchListener implements OnTouchListener {
         view.setScaleX(scale);
         view.setScaleY(scale);
 
-        float rotation = adjustAngle(view.getRotation() + info.deltaAngle);
         if(rotation <= 3 && rotation >= -3){
             view.setRotation(0);
             this.LineAnimation(this.stickerHorizontalLine, 0f, 100f);
@@ -125,9 +124,14 @@ class MultiTouchListener implements OnTouchListener {
 
     }
 
-    private static void adjustTranslation(View view, float deltaX, float deltaY, boolean moveX, boolean moveY, float X, float Y) {
+    private static void adjustTranslation(View view, float deltaX, float deltaY, boolean moveX, boolean moveY, float X, float Y, float rotate) {
         float[] deltaVector = {deltaX, deltaY};
+        float[] deltaRotate = {deltaX, deltaY};
         view.getMatrix().mapVectors(deltaVector);
+        view.getMatrix().preRotate(rotate);
+        view.getMatrix().mapPoints(deltaRotate);
+        Log.d("deltaRotate", "" + Arrays.toString(deltaRotate));
+        Log.d("deltaRotate", "" + Arrays.toString(deltaVector));
         if(moveX){
             view.setTranslationX(view.getTranslationX() + deltaVector[0]);
         }else {
@@ -139,6 +143,16 @@ class MultiTouchListener implements OnTouchListener {
         }else {
             view.setY(Y);
         }
+
+//        float[] ptArr = {
+//                scaledX, scaledY,
+//                (scaledX + scaleWidth), scaledY,
+//                (scaledX + scaleWidth), (scaledY + scaledHeight),
+//                scaledX, (scaledY + scaledHeight)
+//        };
+//        Matrix m = new Matrix();
+//        m.preRotate(view.getRotation(), (scaleWidth / 2), (scaledHeight / 2));
+//        m.mapPoints(ptArr);
     }
 
     private void LineAnimation(View view, float start, float end){
@@ -191,26 +205,21 @@ class MultiTouchListener implements OnTouchListener {
                     float scaledHeight = renderedHeight == 0.0 ? view.getHeight() : renderedHeight;
                     float rotateP = ((view.getRotation() / 360) * 100);
                     double rotateR = Math.toRadians(view.getRotation());
-                    int scaledX = (int) view.getX();
-                    int scaledY = (int) view.getY();
+                    int test1[] = new int[2];
+                    view.getLocationOnScreen(test1);
+                    int scaledX = (int) test1[0];
+                    int scaledY = (int) test1[1];
                     view.setPivotX(scaleWidth / 2);
                     view.setPivotY(scaledHeight / 2);
 
 
-                    float[] ptArr = new float[] { scaledX, scaledY, (scaledX + scaleWidth), scaledY, (scaledX + scaleWidth), (scaledY + scaledHeight), scaledX, (scaledY + scaledHeight)};
-                    Matrix m = new Matrix();
-                    m.preRotate(view.getRotation());
-                    m.mapPoints(ptArr);
-
-                    Log.d("ptArr", Arrays.toString(ptArr));
 
                     Log.d("photoEdit_width", "width" + photoEditImageView.getWidth());
-                    Log.d("rotateR", rotateR + "");
+                    Log.d("getRotation", view.getRotation() + "");
 
-                    Log.d("TEST_", "" + ((scaledX * Math.cos(rotateR)) - (scaledY * Math.sin(rotateR))));
-
+//                    Log.d("TEST_", "" + ((scaledX * Math.cos(rotateR)) - (scaledY * Math.sin(rotateR))));
                     Log.d("POSITION_1", "X_1 " + scaledX + " Y_1 " + scaledY);
-                    Log.d("POSITION_2", "X_2 " + (scaledX + scaleWidth + (scaleWidth * (rotateP / 100))) + " Y_2 " + (scaledY + (scaledHeight * (rotateP / 100))));
+                    Log.d("POSITION_2", "X_2 " + (scaledX + scaleWidth) + " Y_2 " + scaledY);
                     Log.d("POSITION_3", "X_3 " + scaledX + " Y_3 " + (scaledY + scaledHeight));
                     Log.d("POSITION_4", "X_4 " + (scaledX + scaleWidth) + " Y_4 " + (scaledY + scaledHeight));
 
@@ -272,7 +281,7 @@ class MultiTouchListener implements OnTouchListener {
                     }
 
                     if (!mScaleGestureDetector.isInProgress()) {
-                        adjustTranslation(view, currX - mPrevX, currY - mPrevY, moveX, moveY, scaledX, scaledY);
+                        adjustTranslation(view, currX - mPrevX, currY - mPrevY, moveX, moveY, scaledX, scaledY, view.getRotation());
                     }
 
 
