@@ -1,29 +1,18 @@
 package com.btwb.photoeditorsdk;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
-import java.util.Random;
 
 class MultiTouchListener implements OnTouchListener {
 
@@ -35,27 +24,23 @@ class MultiTouchListener implements OnTouchListener {
     private boolean isScaleEnabled = true;
     private float maximumScale = 10.0f;
     private int mActivePointerId = INVALID_POINTER_ID;
-    private float mPrevX, mPrevY, mPrevRawX, mPrevRawY, mLeftX, mRightX, mBottomX, mTopX, mVertical, mHorizontal;
+    private int mPrevX, mPrevY, mPrevRawX, mPrevRawY, mLeftX, mRightX, mBottomX, mTopX, mVertical, mHorizontal;
     private ScaleGestureDetector mScaleGestureDetector;
 
     private int[] location = new int[2];
-    private int width;
+    private int width, statusBar;
     private Rect outRect;
     private boolean editable;
     private boolean moveX = true;
     private boolean moveY = true;
-    private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine;
+    private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine;
     private String type;
-    private ImageView photoEditImageView;
-    private ConstraintLayout parentView;
-    private LinearLayout  activeView;
+    private ImageView photoEditImageView, stickerHorizontalLine;
 
     private OnMultiTouchListener onMultiTouchListener;
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
     MultiTouchListener(View deleteView,
-                       ConstraintLayout parentView,
-                       LinearLayout activeView,
                        ImageView photoEditImageView,
                        OnPhotoEditorSDKListener onPhotoEditorSDKListener,
                        int width,
@@ -67,7 +52,7 @@ class MultiTouchListener implements OnTouchListener {
                        View topHorizontalLine,
                        View verticalLine,
                        View horizontalLine,
-                       View stickerHorizontalLine
+                       ImageView stickerHorizontalLine
     ) {
         mScaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener());
         this.deleteView = deleteView;
@@ -78,8 +63,6 @@ class MultiTouchListener implements OnTouchListener {
         this.topHorizontalLine = topHorizontalLine;
         this.verticalLine = verticalLine;
         this.horizontalLine = horizontalLine;
-        this.parentView = parentView;
-        this.activeView = activeView;
         this.editable = editable;
         this.type = type;
         this.width = width;
@@ -102,7 +85,7 @@ class MultiTouchListener implements OnTouchListener {
     private void move(View view, TransformInfo info) {
 //        computeRenderOffset(view, 100, 100);
         float rotation = adjustAngle(view.getRotation() + info.deltaAngle);
-        adjustTranslation(view, info.deltaX, info.deltaY, true, true, 0,0, rotation);
+        adjustTranslation(view, info.deltaX, info.deltaY, true, true);
 
         float scale = view.getScaleX() * info.deltaScale;
         scale = Math.max(info.minimumScale, Math.min(info.maximumScale, scale));
@@ -111,48 +94,38 @@ class MultiTouchListener implements OnTouchListener {
         view.setScaleX(scale);
         view.setScaleY(scale);
 
+        int[] coordinate = new int[2];
+        view.getLocationInWindow(coordinate);
+        int scaledY = coordinate[1] - 60;
+
         if(rotation <= 3 && rotation >= -3){
             view.setRotation(0);
-            this.LineAnimation(this.stickerHorizontalLine, 0f, 100f);
-            this.stickerHorizontalLine.setY(view.getY() + (renderedHeight / 2));
+            this.LineAnimation(this.stickerHorizontalLine, 0f, 60f);
+            this.stickerHorizontalLine.setY(scaledY + (renderedHeight / 2));
         } else {
             view.setRotation(rotation);
-            this.LineAnimation(this.stickerHorizontalLine, 100f, 0f);
+            this.LineAnimation(this.stickerHorizontalLine, 60f, 0f);
         }
 
 
 
     }
 
-    private static void adjustTranslation(View view, float deltaX, float deltaY, boolean moveX, boolean moveY, float X, float Y, float rotate) {
+    private static void adjustTranslation(View view, float deltaX, float deltaY, boolean moveX, boolean moveY) {
         float[] deltaVector = {deltaX, deltaY};
-        float[] deltaRotate = {deltaX, deltaY};
+
         view.getMatrix().mapVectors(deltaVector);
-        view.getMatrix().preRotate(rotate);
-        view.getMatrix().mapPoints(deltaRotate);
-        Log.d("deltaRotate", "" + Arrays.toString(deltaRotate));
-        Log.d("deltaRotate", "" + Arrays.toString(deltaVector));
         if(moveX){
             view.setTranslationX(view.getTranslationX() + deltaVector[0]);
         }else {
-            view.setX(X);
+            view.setTranslationX(view.getTranslationX());
         }
 
         if(moveY){
             view.setTranslationY(view.getTranslationY() + deltaVector[1]);
         }else {
-            view.setY(Y);
+            view.setTranslationY(view.getTranslationY());
         }
-
-//        float[] ptArr = {
-//                scaledX, scaledY,
-//                (scaledX + scaleWidth), scaledY,
-//                (scaledX + scaleWidth), (scaledY + scaledHeight),
-//                scaledX, (scaledY + scaledHeight)
-//        };
-//        Matrix m = new Matrix();
-//        m.preRotate(view.getRotation(), (scaleWidth / 2), (scaledHeight / 2));
-//        m.mapPoints(ptArr);
     }
 
     private void LineAnimation(View view, float start, float end){
@@ -178,18 +151,19 @@ class MultiTouchListener implements OnTouchListener {
         renderedWidth = view.getWidth() * view.getScaleX();
         renderedHeight = view.getHeight() * view.getScaleX();
 
+
         switch (action & event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                mLeftX = this.leftLineView.getX();
-                mRightX = this.rightLineView.getX();
-                mBottomX = this.bottomHorizontalLine.getY();
-                mTopX = this.topHorizontalLine.getY();
-                mVertical = this.verticalLine.getX();
-                mHorizontal = this.horizontalLine.getY();
-                mPrevX = event.getX();
-                mPrevY = event.getY();
-                mPrevRawX = event.getRawX();
-                mPrevRawY = event.getRawY();
+                mLeftX = (int) this.leftLineView.getX();
+                mRightX = (int) this.rightLineView.getX();
+                mBottomX = (int) this.bottomHorizontalLine.getY();
+                mTopX = (int) this.topHorizontalLine.getY();
+                mVertical = (int) this.verticalLine.getX();
+                mHorizontal = (int) this.horizontalLine.getY();
+                mPrevX = (int) event.getX();
+                mPrevY = (int) event.getY();
+                mPrevRawX = (int) event.getRawX();
+                mPrevRawY = (int) event.getRawY();
                 mActivePointerId = event.getPointerId(0);
                 deleteView.setVisibility(View.VISIBLE);
 //                activeView.setVisibility(View.GONE);
@@ -203,74 +177,79 @@ class MultiTouchListener implements OnTouchListener {
                     int currY = (int) event.getY(pointerIndexMove);
                     float scaleWidth = renderedWidth == 0.0 ? view.getWidth() : renderedWidth;
                     float scaledHeight = renderedHeight == 0.0 ? view.getHeight() : renderedHeight;
-                    float rotateP = ((view.getRotation() / 360) * 100);
-                    double rotateR = Math.toRadians(view.getRotation());
-                    int test1[] = new int[2];
-                    view.getLocationOnScreen(test1);
-                    int scaledX = (int) test1[0];
-                    int scaledY = (int) test1[1];
+                    int[] coordinate = new int[2];
+                    view.getLocationInWindow(coordinate);
+                    if (view.getScaleY() == 1.0){
+                        statusBar = (int) (coordinate[1] - view.getY());
+                    }
+                    int scaledX = coordinate[0];
+                    int scaledY = coordinate[1] - statusBar;
                     view.setPivotX(scaleWidth / 2);
                     view.setPivotY(scaledHeight / 2);
 
+                    float[] src = {
+                            scaledX,scaledY, // left, top
+                            (scaledX + scaleWidth),scaledY, // right, top
+                            (scaledX + scaleWidth),(scaledY + scaledHeight), // right, bottom
+                            (scaledX),(scaledY + scaledHeight) // left, bottom
+                    };
+                    float[] dist = new float[8];
+                    Matrix matrix = new Matrix();
+                    matrix.preRotate(view.getRotation(), scaledX, scaledY);
+                    matrix.mapPoints(dist,src);
+                    float[] horizontal = new float[] { dist[0],dist[2],dist[4],dist[6] };
+                    float[] vertical = new float[] { dist[1],dist[3],dist[5],dist[7] };
+                    Arrays.sort(horizontal);
+                    Arrays.sort(vertical);
+                    int minLeft = (int) horizontal[0];
+                    int maxRight = (int) horizontal[horizontal.length - 1];
+                    int minTop = (int) vertical[0];
+                    int maxBottom = (int) vertical[vertical.length - 1];
+                    float verticalPoint = (minLeft +  ((maxRight - minLeft) / 2));
+                    float horizontalPoint = (minTop +  ((maxBottom - minTop) / 2));
 
 
-                    Log.d("photoEdit_width", "width" + photoEditImageView.getWidth());
-                    Log.d("getRotation", view.getRotation() + "");
-
-//                    Log.d("TEST_", "" + ((scaledX * Math.cos(rotateR)) - (scaledY * Math.sin(rotateR))));
-                    Log.d("POSITION_1", "X_1 " + scaledX + " Y_1 " + scaledY);
-                    Log.d("POSITION_2", "X_2 " + (scaledX + scaleWidth) + " Y_2 " + scaledY);
-                    Log.d("POSITION_3", "X_3 " + scaledX + " Y_3 " + (scaledY + scaledHeight));
-                    Log.d("POSITION_4", "X_4 " + (scaledX + scaleWidth) + " Y_4 " + (scaledY + scaledHeight));
-
-
-                    if((scaledX > (mLeftX - 2) && scaledX < (mLeftX + 2)) && moveX){
+                    if(minLeft == (mLeftX + 4) && moveX){
                         this.LineAnimation(this.leftLineView, 0f, 100f);
-//                        scaledX = (int) (mLeftX + 6);
-//                        moveX = false;
+                        moveX = false;
                     }else if (this.leftLineView.getAlpha() == 100.0 && moveX){
                         this.LineAnimation(this.leftLineView, 100f, 0f);
                     }
 
-//                    if(((scaledX + scaleWidth)  > (mRightX - 2) && (scaledX + scaleWidth)  < (mRightX + 2)) && moveX){
-//                        this.LineAnimation(this.rightLineView, 0f, 100f);
-//                        scaledX = (int) (mRightX - scaleWidth);
-//                        moveX = false;
-//                    }else if (this.rightLineView.getAlpha() == 100.0 && moveX){
-//                        this.LineAnimation(this.rightLineView, 100f, 0f);
-//                    }
+                    if(maxRight == (mRightX)  && moveX){
+                        this.LineAnimation(this.rightLineView, 0f, 100f);
+                        moveX = false;
+                    }else if (this.rightLineView.getAlpha() == 100.0 && moveX){
+                        this.LineAnimation(this.rightLineView, 100f, 0f);
+                    }
+
+                    if(maxBottom == mBottomX && moveY){
+                        this.LineAnimation(this.bottomHorizontalLine, 0f, 100f);
+                        moveY = false;
+                    }else if (this.bottomHorizontalLine.getAlpha() == 100.0 && moveY){
+                        this.LineAnimation(this.bottomHorizontalLine, 100f, 0f);
+                    }
+
+                    if(minTop == (mTopX + 4) && moveY){
+                        this.LineAnimation(this.topHorizontalLine, 0f, 100f);
+                        moveY = false;
+                    }else if (this.topHorizontalLine.getAlpha() == 100.0 && moveY){
+                        this.LineAnimation(this.topHorizontalLine, 100f, 0f);
+                    }
 //
-//                    if(((scaledY + scaledHeight) > (mBottomX - 2) && ((scaledY + scaledHeight) < (mBottomX + 2))) && moveY){
-//                        this.LineAnimation(this.bottomHorizontalLine, 0f, 100f);
-//                        scaledY = (int) (mBottomX - scaledHeight);
-//                        moveY = false;
-//                    }else if (this.bottomHorizontalLine.getAlpha() == 100.0 && moveY){
-//                        this.LineAnimation(this.bottomHorizontalLine, 100f, 0f);
-//                    }
+                    if((verticalPoint > (mVertical - 2) && verticalPoint < (mVertical + 2)) && moveX){
+                        this.LineAnimation(this.verticalLine, 0f, 100f);
+                        moveX = false;
+                    }else if (this.verticalLine.getAlpha() == 100.0 && moveX){
+                        this.LineAnimation(this.verticalLine, 100f, 0f);
+                    }
 //
-//                    if((scaledY > (mTopX - 2) && scaledY < (mTopX + 2)) && moveY){
-//                        this.LineAnimation(this.topHorizontalLine, 0f, 100f);
-//                        scaledY = (int) (mTopX + 2);
-//                        moveY = false;
-//                    }else if (this.topHorizontalLine.getAlpha() == 100.0 && moveY){
-//                        this.LineAnimation(this.topHorizontalLine, 100f, 0f);
-//                    }
-//
-//                    if(((scaledX + scaleWidth / 2) > (mVertical - 2) && (scaledX + scaleWidth / 2) < (mVertical + 2)) && moveX){
-//                        this.LineAnimation(this.verticalLine, 0f, 100f);
-//                        scaledX = (int) (mVertical - (scaleWidth / 2));
-//                        moveX = false;
-//                    }else if (this.verticalLine.getAlpha() == 100.0 && moveX){
-//                        this.LineAnimation(this.verticalLine, 100f, 0f);
-//                    }
-//
-//                    if(((scaledY + scaledHeight / 2) >  (mHorizontal - 2) && (scaledY + scaledHeight / 2) <  (mHorizontal + 2)) && moveY){
-//                        this.LineAnimation(this.horizontalLine, 0f, 100f);
-//                        scaledY = (int) (mHorizontal - (scaledHeight / 2));
-//                        moveY = false;
-//                    }else if (this.horizontalLine.getAlpha() == 100.0 && moveY){
-//                        this.LineAnimation(this.horizontalLine, 100f, 0f);
-//                    }
+                    if((horizontalPoint >  (mHorizontal - 2) && horizontalPoint <  (mHorizontal + 2)) && moveY){
+                        this.LineAnimation(this.horizontalLine, 0f, 100f);
+                        moveY = false;
+                    }else if (this.horizontalLine.getAlpha() == 100.0 && moveY){
+                        this.LineAnimation(this.horizontalLine, 100f, 0f);
+                    }
 
                     if(mPrevX - currX > 30 || mPrevX - currX < -30){
                         moveX = true;
@@ -281,7 +260,7 @@ class MultiTouchListener implements OnTouchListener {
                     }
 
                     if (!mScaleGestureDetector.isInProgress()) {
-                        adjustTranslation(view, currX - mPrevX, currY - mPrevY, moveX, moveY, scaledX, scaledY, view.getRotation());
+                        adjustTranslation(view, currX - mPrevX, currY - mPrevY, moveX, moveY);
                     }
 
 
@@ -333,8 +312,8 @@ class MultiTouchListener implements OnTouchListener {
                 int pointerId = event.getPointerId(pointerIndexPointerUp);
                 if (pointerId == mActivePointerId) {
                     int newPointerIndex = pointerIndexPointerUp == 0 ? 1 : 0;
-                    mPrevX = event.getX(newPointerIndex);
-                    mPrevY = event.getY(newPointerIndex);
+                    mPrevX = (int) event.getX(newPointerIndex);
+                    mPrevY = (int) event.getY(newPointerIndex);
                     mActivePointerId = event.getPointerId(newPointerIndex);
                 }
                 break;
@@ -398,8 +377,7 @@ class MultiTouchListener implements OnTouchListener {
         @Override
         public boolean onScale(View view, ScaleGestureDetector detector) {
             TransformInfo info = new TransformInfo();
-//            info.deltaScale = isScaleEnabled ? detector.getScaleFactor() : 1.0f;
-            info.deltaScale = 1.0f;
+            info.deltaScale = isScaleEnabled ? detector.getScaleFactor() : 1.0f;
             info.deltaAngle = isRotateEnabled ? Vector2D.getAngle(mPrevSpanVector, detector.getCurrentSpanVector()) : 0.0f;
             info.deltaX = isTranslateEnabled ? detector.getFocusX() - mPivotX : 0.0f;
             info.deltaY = isTranslateEnabled ? detector.getFocusY() - mPivotY : 0.0f;

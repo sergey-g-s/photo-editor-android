@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,8 +41,8 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
     private Context context;
     private ConstraintLayout parentView;
     private LinearLayout activeView;
-    private ImageView imageView;
-    private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine;
+    private ImageView imageView, stickerHorizontalLine;
+    private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine;
     private BrushDrawingView brushDrawingView;
     private List<View> addedViews;
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
@@ -63,7 +64,6 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         this.brushDrawingView = photoEditorSDKBuilder.brushDrawingView;
         addedViews = new ArrayList<>();
     }
-
     public void addImage(Bitmap desiredImage) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View imageRootView = inflater.inflate(R.layout.photo_editor_sdk_image_item_list, null);
@@ -74,8 +74,9 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         imageView.setImageBitmap(desiredImage);
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT));
+
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView,activeView, this.imageView, onPhotoEditorSDKListener, 0,false, "", this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
+                this.imageView, onPhotoEditorSDKListener, 0,false, "", this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         imageRootView.setOnTouchListener(multiTouchListener);
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
@@ -104,7 +105,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView,activeView, this.imageView, onPhotoEditorSDKListener, 0,false, "",this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
+               this.imageView, onPhotoEditorSDKListener, 0,false, "",this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         viewRootView.setOnTouchListener(multiTouchListener);
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
@@ -163,7 +164,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
 
 
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView,activeView, this.imageView, onPhotoEditorSDKListener,width, true, type, this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
+                this.imageView, onPhotoEditorSDKListener,width, true, type, this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         addTextRootView.setOnTouchListener(multiTouchListener);
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
@@ -253,7 +254,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         parentView.addView(addTextView, params);
         addedViews.add(addTextView);
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                    parentView, activeView, this.imageView, onPhotoEditorSDKListener, width,editable, type, this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
+                   this.imageView, onPhotoEditorSDKListener, width,editable, type, this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
             multiTouchListener.setOnMultiTouchListener(this);
             addTextView.setOnTouchListener(multiTouchListener);
             if (onPhotoEditorSDKListener != null)
@@ -269,7 +270,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         emojiTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         emojiTextView.setText(convertEmoji(emojiName));
         MultiTouchListener multiTouchListener = new MultiTouchListener(deleteView,
-                parentView,activeView ,this.imageView, onPhotoEditorSDKListener, 0,false, "", this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
+               this.imageView, onPhotoEditorSDKListener, 0,false, "", this.leftLineView, this.rightLineView, this.bottomHorizontalLine, this.topHorizontalLine, this.verticalLine, this.horizontalLine, this.stickerHorizontalLine);
         multiTouchListener.setOnMultiTouchListener(this);
         emojiRootView.setOnTouchListener(multiTouchListener);
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
@@ -443,8 +444,8 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         private Context context;
         private ConstraintLayout parentView;
         private LinearLayout activeView;
-        private ImageView imageView;
-        private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine, stickerHorizontalLine;
+        private ImageView imageView, stickerHorizontalLine;
+        private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine;
         private BrushDrawingView brushDrawingView;
 
         public PhotoEditorSDKBuilder(Context context) {
@@ -456,7 +457,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
             return this;
         }
 
-        public PhotoEditorSDKBuilder line(View left, View right,View bottom, View top, View vertical, View horizontal, View stickerHorizontalLine) {
+        public PhotoEditorSDKBuilder line(View left, View right,View bottom, View top, View vertical, View horizontal, ImageView stickerHorizontalLine) {
             this.leftLineView = left;
             this.rightLineView = right;
             this.bottomHorizontalLine = bottom;

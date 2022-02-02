@@ -115,8 +115,8 @@
                 <View
                     android:id="@+id/bottomHorizontalLine"
                     android:layout_alignBottom="@+id/photo_edit_iv"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="4px"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="20dp"
                     android:alpha="0"
@@ -124,47 +124,39 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintDimensionRatio="1440:4"
                     />
 
                 <View
                     android:id="@+id/topHorizontalLine"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="4px"
                     android:layout_marginTop="20dp"
                     android:alpha="0"
                     android:background="@color/red_color_picker"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/view"
-                    app:layout_constraintDimensionRatio="1440:4"
                     />
 
                 <View
                     android:id="@+id/horizontalLine"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="4px"
                     android:layout_centerVertical="true"
                     android:alpha="0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1440:4"
                     android:background="@color/red_color_picker" />
 
-                <View
+                <ImageView
                     android:id="@+id/stickerHorizontalLine"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
                     android:alpha="0"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1440:4"
-                    android:background="@color/red_color_picker" />
+                    android:src="@drawable/dotted"
+                    android:layerType="software" />
 
                 <View
                     android:id="@+id/verticalLine"
@@ -176,7 +168,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintDimensionRatio="4:1575"
+                    app:layout_constraintDimensionRatio="6:1575"
                     android:background="@color/red_color_picker" />
 
 

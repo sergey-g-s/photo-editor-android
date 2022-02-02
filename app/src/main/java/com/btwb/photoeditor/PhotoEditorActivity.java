@@ -99,7 +99,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         topShadow = findViewById(R.id.top_shadow);
         topShadowRelativeLayout = (RelativeLayout) findViewById(R.id.top_parent_rl);
         bottomShadow = findViewById(R.id.bottom_shadow);
-        View stickerHorizontalLine = findViewById(R.id.stickerHorizontalLine);
+        ImageView stickerHorizontalLine = (ImageView) findViewById(R.id.stickerHorizontalLine);
         View leftVerticalLine = findViewById(R.id.leftVerticalLine);
         View rightVerticalLine = findViewById(R.id.rightVerticalLine);
         View bottomHorizontalLine = findViewById(R.id.bottomHorizontalLine);
@@ -215,7 +215,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
 
 //                photoEditorSDK.addStickers("Level:54",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "date",icon, 10, convertDpToPixel(45), top + convertDpToPixel(50), "#000000", "#33ffffff",  convertDpToPixel(100), 2,8,true, true, null);
-                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10,0, top + 1485, "#250000", "#ffffff",  convertDpToPixel(0), 2,8,true, false,"TEST TEST");
+                photoEditorSDK.addStickers("Level:77",  Typeface.createFromAsset(getAssets(), "Oswald-Medium.ttf"), "text",icon,3, 10,0, top + 200, "#250000", "#ffffff",  convertDpToPixel(0), 2,8,true, false,"TEST TEST");
             }
         }.start();
     }
