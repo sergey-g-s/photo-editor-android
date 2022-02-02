@@ -36,11 +36,15 @@ class MultiTouchListener implements OnTouchListener {
     private View deleteView, leftLineView, rightLineView, bottomHorizontalLine, topHorizontalLine, verticalLine, horizontalLine;
     private String type;
     private ImageView photoEditImageView, stickerHorizontalLine;
+    private ConstraintLayout parentView;
+    private LinearLayout  activeView;
 
     private OnMultiTouchListener onMultiTouchListener;
     private OnPhotoEditorSDKListener onPhotoEditorSDKListener;
 
     MultiTouchListener(View deleteView,
+                       ConstraintLayout parentView,
+                       LinearLayout activeView,
                        ImageView photoEditImageView,
                        OnPhotoEditorSDKListener onPhotoEditorSDKListener,
                        int width,
@@ -63,6 +67,8 @@ class MultiTouchListener implements OnTouchListener {
         this.topHorizontalLine = topHorizontalLine;
         this.verticalLine = verticalLine;
         this.horizontalLine = horizontalLine;
+        this.parentView = parentView;
+        this.activeView = activeView;
         this.editable = editable;
         this.type = type;
         this.width = width;
@@ -166,7 +172,7 @@ class MultiTouchListener implements OnTouchListener {
                 mPrevRawY = (int) event.getRawY();
                 mActivePointerId = event.getPointerId(0);
                 deleteView.setVisibility(View.VISIBLE);
-//                activeView.setVisibility(View.GONE);
+                activeView.setVisibility(View.GONE);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
                 break;
@@ -186,6 +192,7 @@ class MultiTouchListener implements OnTouchListener {
                     int scaledY = coordinate[1] - statusBar;
                     view.setPivotX(scaleWidth / 2);
                     view.setPivotY(scaledHeight / 2);
+
 
                     float[] src = {
                             scaledX,scaledY, // left, top
@@ -279,7 +286,7 @@ class MultiTouchListener implements OnTouchListener {
                         view.animate().translationY(0).translationY(0);
                 }
                 deleteView.setVisibility(View.GONE);
-//                activeView.setVisibility(View.VISIBLE);
+                activeView.setVisibility(View.VISIBLE);
                 moveY = true;
                 moveX = true;
                 this.LineAnimation(this.horizontalLine, 100f, 0f);
