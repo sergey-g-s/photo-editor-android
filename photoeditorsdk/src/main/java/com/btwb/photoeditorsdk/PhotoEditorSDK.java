@@ -191,7 +191,8 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
                             int paddingHorizontal,
                             boolean editable,
                             boolean center,
-                            String rightText
+                            String rightText,
+                            int numberOfLines
     ) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         addTextRootView = inflater.inflate(R.layout.photo_editor_sdk_text_item_list, null);
@@ -202,6 +203,7 @@ public class PhotoEditorSDK implements MultiTouchListener.OnMultiTouchListener {
         addTextView.setPadding(paddingHorizontal,paddingVertical,paddingHorizontal,paddingVertical);
         addTextView.setTextColor(Color.parseColor(textColor));
         addTextView.setBackgroundColor(Color.parseColor(backgroundColor));
+        addTextView.setMaxLines(numberOfLines);
 
         if(rightText != null){
             Spannable word = new SpannableString(text);
